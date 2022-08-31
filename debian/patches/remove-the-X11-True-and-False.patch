@@ -1,0 +1,57 @@
+Index: qtbase-opensource-src/src/corelib/serialization/qcborcommon.h
+===================================================================
+--- qtbase-opensource-src.orig/src/corelib/serialization/qcborcommon.h
++++ qtbase-opensource-src/src/corelib/serialization/qcborcommon.h
+@@ -50,7 +50,6 @@
+ 
+ /* X11 headers use these values too, but as defines */
+ #if defined(False) && defined(True)
+-#  define QT_X11_DEFINES_FOUND 1
+ #  undef True
+ #  undef False
+ #endif
+Index: qtbase-opensource-src/src/corelib/serialization/qcborstreamreader.h
+===================================================================
+--- qtbase-opensource-src.orig/src/corelib/serialization/qcborstreamreader.h
++++ qtbase-opensource-src/src/corelib/serialization/qcborstreamreader.h
+@@ -49,8 +49,8 @@
+ 
+ QT_REQUIRE_CONFIG(cborstreamreader);
+ 
+-// See qcborcommon.h for why we check
+-#if defined(QT_X11_DEFINES_FOUND)
++/* X11 headers use these values too, but as defines */
++#if defined(False) && defined(True)
+ #  undef True
+ #  undef False
+ #endif
+Index: qtbase-opensource-src/src/corelib/serialization/qcborstreamwriter.h
+===================================================================
+--- qtbase-opensource-src.orig/src/corelib/serialization/qcborstreamwriter.h
++++ qtbase-opensource-src/src/corelib/serialization/qcborstreamwriter.h
+@@ -51,8 +51,8 @@
+ 
+ QT_REQUIRE_CONFIG(cborstreamwriter);
+ 
+-// See qcborcommon.h for why we check
+-#if defined(QT_X11_DEFINES_FOUND)
++/* X11 headers use these values too, but as defines */
++#if defined(False) && defined(True)
+ #  undef True
+ #  undef False
+ #endif
+Index: qtbase-opensource-src/src/corelib/serialization/qcborvalue.h
+===================================================================
+--- qtbase-opensource-src.orig/src/corelib/serialization/qcborvalue.h
++++ qtbase-opensource-src/src/corelib/serialization/qcborvalue.h
+@@ -53,8 +53,8 @@
+ #include <QtCore/qvariant.h>
+ #include <QtCore/qvector.h>
+ 
+-// See qcborcommon.h for why we check
+-#if defined(QT_X11_DEFINES_FOUND)
++/* X11 headers use these values too, but as defines */
++#if defined(False) && defined(True)
+ #  undef True
+ #  undef False
+ #endif

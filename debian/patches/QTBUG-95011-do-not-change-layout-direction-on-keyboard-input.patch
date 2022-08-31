@@ -1,0 +1,23 @@
+Author: fanruijie <fanruijie@uniontech.com>
+Date:   Wed July 14 10:42:24 2021 +0800
+Subject: fix QColorDialog html do not translate
+
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/358558
+
+Index: qtbase-opensource-src/src/widgets/widgets/qlineedit.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/widgets/qlineedit.cpp
++++ qtbase-opensource-src/src/widgets/widgets/qlineedit.cpp
+@@ -1839,11 +1839,8 @@ void QLineEdit::keyPressEvent(QKeyEvent
+     }
+ #endif
+     d->control->processKeyEvent(event);
+-    if (event->isAccepted()) {
+-        if (layoutDirection() != d->control->layoutDirection())
+-            setLayoutDirection(d->control->layoutDirection());
++    if (event->isAccepted())
+         d->control->updateCursorBlinking();
+-    }
+ }
+ 
+ /*!

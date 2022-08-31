@@ -1,0 +1,18 @@
+Author: Zhang Hao <zhanghao@uniontech.com>
+Date:   Thu Mar 4 20:08:13 2021 +0800
+Subject: fix QMenu do not show shortcuts in context menus by default
+---
+
+Index: qtbase-opensource-src/src/gui/kernel/qplatformtheme.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/gui/kernel/qplatformtheme.cpp
++++ qtbase-opensource-src/src/gui/kernel/qplatformtheme.cpp
+@@ -523,7 +523,7 @@ QVariant QPlatformTheme::defaultThemeHin
+     case QPlatformTheme::StyleNames:
+         return QVariant(QStringList());
+     case QPlatformTheme::ShowShortcutsInContextMenus:
+-        return QVariant(true);
++        return QVariant(false);
+     case TextCursorWidth:
+         return QVariant(1);
+     case DropShadow:

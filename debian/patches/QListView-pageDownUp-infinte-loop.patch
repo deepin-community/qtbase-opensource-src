@@ -1,0 +1,76 @@
+Author: Tang Haixiang <tanghaixiang@uniontech.com>
+Date:   Fri Jul 08 14:09:12 2022 +0800
+Subject: QListview: PageDown/Up infinite loop
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/420215
+
+---
+
+Index: qtbase-opensource-src/src/widgets/itemviews/qlistview.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/itemviews/qlistview.cpp
++++ qtbase-opensource-src/src/widgets/itemviews/qlistview.cpp
+@@ -1226,7 +1226,10 @@ QModelIndex QListView::moveCursor(Cursor
+         }
+         return d->closestIndex(initialRect, intersectVector);
+     case MovePageUp: {
+-        rect.moveTop(rect.top() - d->viewport->height() + 1 );
++        if (rect.height() >= d->viewport->height())
++           return moveCursor(QAbstractItemView::MoveUp, modifiers);
++
++        rect.moveTop(rect.top() - d->viewport->height() + 1);
+         if (rect.top() < rect.height()) {
+             rect.setTop(0);
+             rect.setBottom(1);
+@@ -1267,8 +1270,11 @@ QModelIndex QListView::moveCursor(Cursor
+         }
+         return d->closestIndex(initialRect, intersectVector);
+     case MovePageDown: {
+-        rect.moveTop(rect.top() + d->viewport->height() - 1 );
+-        if (rect.bottom() > contents.height() - rect.height()){
++        if (rect.height() >= d->viewport->height())
++           return moveCursor(QAbstractItemView::MoveDown, modifiers);
++
++        rect.moveTop(rect.top() + d->viewport->height() - 1);
++        if (rect.bottom() > contents.height() - rect.height()) {
+             rect.setTop(contents.height() - 1);
+             rect.setBottom(contents.height());
+         }
+Index: qtbase-opensource-src/tests/auto/widgets/itemviews/qlistview/tst_qlistview.cpp
+===================================================================
+--- qtbase-opensource-src.orig/tests/auto/widgets/itemviews/qlistview/tst_qlistview.cpp
++++ qtbase-opensource-src/tests/auto/widgets/itemviews/qlistview/tst_qlistview.cpp
+@@ -111,6 +111,7 @@ private slots:
+     void moveCursor2();
+     void moveCursor3();
+     void moveCursor4();
++    void moveCursor5();
+     void indexAt();
+     void clicked();
+     void singleSelectionRemoveRow();
+@@ -627,6 +628,26 @@ void tst_QListView::moveCursor4()
+     QTRY_COMPARE(idx, model.index(actualIndex - 2, 0));
+ }
+ 
++void tst_QListView::moveCursor5()
++{
++    PublicListView listView;;
++    QStandardItemModel model;
++    QIcon icon(QPixmap(300,300));
++    model.appendRow(new QStandardItem(icon,"11"));
++    model.appendRow(new QStandardItem(icon,"22"));
++    model.appendRow(new QStandardItem(icon,"33"));
++    listView.setModel(&model);
++    listView.setGeometry(10,10,200,200);
++    listView.setIconSize(QSize(300,300));
++    listView.setViewMode(QListView::IconMode);
++    listView.setCurrentIndex(model.index(0, 0));
++
++    QModelIndex idx = listView.moveCursor(PublicListView::MovePageDown, Qt::NoModifier);
++    QTRY_COMPARE(idx, model.index(1, 0));
++    idx = listView.moveCursor(PublicListView::MovePageUp, Qt::NoModifier);
++    QTRY_COMPARE(idx, model.index(0, 0));
++}
++
+ class QListViewShowEventListener : public QListView
+ {
+     Q_OBJECT

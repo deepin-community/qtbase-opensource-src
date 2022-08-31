@@ -1,0 +1,109 @@
+Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/itemviews/qabstractitemview.cpp
++++ qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
+@@ -1668,6 +1668,11 @@ bool QAbstractItemView::event(QEvent *ev
+     case QEvent::FontChange:
+         d->doDelayedItemsLayout(); // the size of the items will change
+         break;
++    case QEvent::Scroll:
++        if (static_cast<QScrollEvent *>(event)->scrollState() == QScrollEvent::ScrollFinished && QScroller::hasScroller(this))
++            if (QScroller::scroller(this)->state() == QScroller::State::Inactive)
++                QScroller::scroller(this)->deleteLater();
++        break;
+     default:
+         break;
+     }
+@@ -1753,6 +1758,21 @@ bool QAbstractItemView::viewportEvent(QE
+ void QAbstractItemView::mousePressEvent(QMouseEvent *event)
+ {
+     Q_D(QAbstractItemView);
++
++    if (event->source() == Qt::MouseEventSynthesizedByQt) {
++        if (event->button() == Qt::LeftButton) {
++
++            if (QScroller::hasScroller(this)) {
++                QScroller::scroller(this)->deleteLater();
++            }
++            d->touchSlideTimer.start(QApplication::doubleClickInterval(), this);
++        }
++    } else {
++        if (QScroller::hasScroller(this)) {
++            QScroller::scroller(this)->deleteLater();
++        }
++    }
++
+     d->delayedAutoScroll.stop(); //any interaction with the view cancel the auto scrolling
+     QPoint pos = event->pos();
+     QPersistentModelIndex index = indexAt(pos);
+@@ -1819,6 +1839,35 @@ void QAbstractItemView::mousePressEvent(
+ void QAbstractItemView::mouseMoveEvent(QMouseEvent *event)
+ {
+     Q_D(QAbstractItemView);
++
++    if (event->source() == Qt::MouseEventSynthesizedByQt) {
++        if (QScroller::hasScroller(this)) {
++            return;
++        }
++
++        if (d->touchSlideTimer.isActive()) {
++            QMargins margins= viewportMargins();
++            QPoint pos = event->pos();
++            pos = pos + QPoint(margins.left(),margins.top());
++            if ((d->pressedPosition - d->offset() - pos).manhattanLength() > 1.5 * QApplication::startDragDistance()) {
++                this->setVerticalScrollMode(ScrollPerPixel);
++                this->setHorizontalScrollMode(ScrollPerPixel);
++                QScroller::grabGesture(this, QScroller::LeftMouseButtonGesture);
++
++                QScroller *scroller = QScroller::scroller(this);
++                scroller->handleInput(QScroller::InputPress, pos, static_cast<qint64>(event->timestamp()));
++                scroller->handleInput(QScroller::InputMove, pos, static_cast<qint64>(event->timestamp()));
++
++            }
++            return;
++        }
++    } else {
++        if (QScroller::hasScroller(this)) {
++            QScroller::ungrabGesture(this);
++            QScroller::scroller(this)->deleteLater();
++        }
++    }
++
+     QPoint topLeft;
+     QPoint bottomRight = event->pos();
+ 
+@@ -2541,6 +2590,8 @@ void QAbstractItemView::timerEvent(QTime
+         doAutoScroll();
+     else if (event->timerId() == d->updateTimer.timerId())
+         d->updateDirtyRegion();
++    else if (event->timerId() == d->touchSlideTimer.timerId())
++        d->touchSlideTimer.stop();
+     else if (event->timerId() == d->delayedEditing.timerId()) {
+         d->delayedEditing.stop();
+         edit(currentIndex());
+@@ -4103,7 +4154,12 @@ QItemSelectionModel::SelectionFlags QAbs
+         return QItemSelectionModel::Toggle|selectionBehaviorFlags();
+     if (state == QAbstractItemView::DragSelectingState) {
+         //when drag-selecting we need to clear any previous selection and select the current one
+-        return QItemSelectionModel::Clear|QItemSelectionModel::SelectCurrent|selectionBehaviorFlags();
++
++        //fix multiple selection of QListView under touch screen and long press function conflict
++        if(event && event->type() == QEvent::MouseButtonPress)
++            return QItemSelectionModel::ClearAndSelect|selectionBehaviorFlags();
++        else
++            return QItemSelectionModel::Clear|QItemSelectionModel::SelectCurrent|selectionBehaviorFlags();
+     }
+ 
+     return QItemSelectionModel::ClearAndSelect|selectionBehaviorFlags();
+Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview_p.h
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/itemviews/qabstractitemview_p.h
++++ qtbase-opensource-src/src/widgets/itemviews/qabstractitemview_p.h
+@@ -432,6 +432,7 @@ public:
+     QBasicTimer delayedEditing;
+     QBasicTimer delayedAutoScroll; //used when an item is clicked
+     QBasicTimer delayedReset;
++    QBasicTimer touchSlideTimer;
+ 
+     QAbstractItemView::ScrollMode verticalScrollMode;
+     QAbstractItemView::ScrollMode horizontalScrollMode;

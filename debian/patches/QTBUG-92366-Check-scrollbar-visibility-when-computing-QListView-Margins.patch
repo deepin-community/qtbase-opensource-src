@@ -1,0 +1,91 @@
+Author: Zhang Hao <zhanghao@uniontech.com>
+Date:   Tue May 18 14:30:42 2021 +0800
+Subject: Check scrollbar visibility when computing QListView margins
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/341804
+---
+
+Index: qtbase-opensource-src/src/widgets/itemviews/qlistview.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/itemviews/qlistview.cpp
++++ qtbase-opensource-src/src/widgets/itemviews/qlistview.cpp
+@@ -1787,7 +1787,7 @@ void QListViewPrivate::prepareItemsLayou
+     // maximumViewportSize() already takes scrollbar into account if policy is
+     // Qt::ScrollBarAlwaysOn but scrollbar extent must be deduced if policy
+     // is Qt::ScrollBarAsNeeded
+-    int verticalMargin = vbarpolicy==Qt::ScrollBarAsNeeded
++    int verticalMargin = (vbarpolicy == Qt::ScrollBarAsNeeded) && (flow == QListView::LeftToRight || vbar->isVisible())
+         ? q->style()->pixelMetric(QStyle::PM_ScrollBarExtent, nullptr, vbar) + frameAroundContents
+         : 0;
+     int horizontalMargin =  hbarpolicy==Qt::ScrollBarAsNeeded
+Index: qtbase-opensource-src/tests/auto/widgets/itemviews/qlistview/tst_qlistview.cpp
+===================================================================
+--- qtbase-opensource-src.orig/tests/auto/widgets/itemviews/qlistview/tst_qlistview.cpp
++++ qtbase-opensource-src/tests/auto/widgets/itemviews/qlistview/tst_qlistview.cpp
+@@ -169,6 +169,7 @@ private slots:
+     void itemAlignment();
+     void internalDragDropMove_data();
+     void internalDragDropMove();
++    void spacingWithWordWrap();
+ };
+ 
+ // Testing get/set functions
+@@ -2716,6 +2717,59 @@ void tst_QListView::internalDragDropMove
+     }
+ }
+ 
++/*!
++    Verify fix for QTBUG-92366
++*/
++void tst_QListView::spacingWithWordWrap()
++{
++    const int listViewResizeCount = 200;
++    QWidget window;
++    window.resize(300, 200);
++    QListView lv(&window);
++
++    lv.setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
++    lv.setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
++    lv.setFlow(QListView::TopToBottom);
++    lv.setWordWrap(true);
++    lv.setSpacing(0);
++    lv.setGeometry(0, 0, 200, 150);
++
++    QStandardItem *it1 = new QStandardItem("qqqqqqqqqqqqqqqqqqqqq-ttttttttttttttttt");
++    QStandardItem *it2 = new QStandardItem("qqqqqqqqqqqqqqqq-tttttttttttt");
++    QStandardItemModel model;
++    lv.setModel(&model);
++    model.appendRow(it1);
++    model.appendRow(it2);
++
++    window.show();
++    QVERIFY(QTest::qWaitForWindowExposed(&window));
++
++    QVERIFY(!lv.verticalScrollBar()->isVisible());
++    for (int i = 0; i < listViewResizeCount; ++i) {
++        lv.resize(lv.width() + 1, lv.height());
++        QRect rectForRowOne = lv.visualRect(model.index(0, 0));
++        QRect rectForRowTwo = lv.visualRect(model.index(1, 0));
++
++        QCOMPARE(rectForRowOne.y() + rectForRowOne.height(), rectForRowTwo.y());
++    }
++
++    lv.resize(200, 150);
++    const QStringList &stringList = generateList(QStringLiteral("Test_Abnormal_Spacing"), 30);
++    for (const QString &item_string : stringList) {
++        QStandardItem *item = new QStandardItem(item_string);
++        model.appendRow(item);
++    }
++
++    // test whether the height of item is correct if the vbar is shown.
++    QTRY_VERIFY(lv.verticalScrollBar()->isVisible());
++    for (int i = 0; i < listViewResizeCount; ++i) {
++        lv.resize(lv.width() + 1, lv.height());
++        QRect rectForRowOne = lv.visualRect(model.index(0, 0));
++        QRect rectForRowTwo = lv.visualRect(model.index(1, 0));
++
++        QCOMPARE(rectForRowOne.y() + rectForRowOne.height(), rectForRowTwo.y());
++    }
++}
+
+ QTEST_MAIN(tst_QListView)
+ #include "tst_qlistview.moc"

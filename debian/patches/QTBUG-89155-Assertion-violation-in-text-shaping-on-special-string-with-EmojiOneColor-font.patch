@@ -1,0 +1,58 @@
+Author: Zhang Hao <zhanghao@uniontech.com>
+Date:   Thu Jul 22 10:47:50 2021 +0800
+Upstream: https://github.com/qt/qtbase/commit/fccd419dd632306a4bd85928223e0a56a59510ef
+Subject: Assertion violation in text shaping on special string with EmojiOneColor font
+
+Index: qtbase-opensource-src/src/gui/text/qtextengine.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/gui/text/qtextengine.cpp
++++ qtbase-opensource-src/src/gui/text/qtextengine.cpp
+@@ -1496,7 +1496,14 @@ void QTextEngine::shapeText(int item) co
+         si.num_glyphs = shapeTextWithHarfbuzz(si, string, itemLength, fontEngine, itemBoundaries, kerningEnabled);
+     }
+     if (Q_UNLIKELY(si.num_glyphs == 0)) {
+-        Q_UNREACHABLE(); // ### report shaping errors somehow
++        if (Q_UNLIKELY(!ensureSpace(si.glyph_data_offset + 1))) {
++            qWarning() << "Unable to allocate space for place-holder glyph";
++            return;
++        }
++        si.num_glyphs = 1;
++        // Overwrite with 0 token to indicate failure
++        QGlyphLayout g = availableGlyphs(&si);
++        g.glyphs[0] = 0;
+         return;
+     }
+ 
+Index: qtbase-opensource-src/tests/auto/gui/text/qglyphrun/tst_qglyphrun.cpp
+===================================================================
+--- qtbase-opensource-src.orig/tests/auto/gui/text/qglyphrun/tst_qglyphrun.cpp
++++ qtbase-opensource-src/tests/auto/gui/text/qglyphrun/tst_qglyphrun.cpp
+@@ -66,6 +66,7 @@ private slots:
+     void boundingRect();
+     void mixedScripts();
+     void multiLineBoundingRect();
++    void defaultIgnorables();
+ 
+ private:
+     int m_testFontId;
+@@ -762,6 +763,20 @@ void tst_QGlyphRun::multiLineBoundingRec
+     QVERIFY(firstLineGlyphRun.boundingRect().height() < allGlyphRun.boundingRect().height());
+ }
+ 
++void tst_QGlyphRun::defaultIgnorables()
++{
++    QTextLayout layout;
++    layout.setFont(QFont("QtsSpecialTestFont"));
++    layout.setText(QChar(0x200D));
++    layout.beginLayout();
++    layout.createLine();
++    layout.endLayout();
++    QList<QGlyphRun> runs = layout.glyphRuns();
++    QCOMPARE(runs.size(), 1);
++    QCOMPARE(runs.at(0).glyphIndexes().size(), 1);
++    QCOMPARE(runs.at(0).glyphIndexes()[0], 0);
++}
++
+ #endif // QT_NO_RAWFONT
+ 
+ QTEST_MAIN(tst_QGlyphRun)

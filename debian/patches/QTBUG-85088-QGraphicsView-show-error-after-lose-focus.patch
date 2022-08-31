@@ -1,0 +1,81 @@
+Index: qtbase_temp/src/widgets/graphicsview/qgraphicsscene.cpp
+===================================================================
+--- qtbase_temp.orig/src/widgets/graphicsview/qgraphicsscene.cpp
++++ qtbase_temp/src/widgets/graphicsview/qgraphicsscene.cpp
+@@ -4230,8 +4230,12 @@ void QGraphicsScene::wheelEvent(QGraphic
+ void QGraphicsScene::inputMethodEvent(QInputMethodEvent *event)
+ {
+     Q_D(QGraphicsScene);
+-    if (d->focusItem && (d->focusItem->flags() & QGraphicsItem::ItemAcceptsInputMethod))
++    if (d->focusItem && (d->focusItem->flags() & QGraphicsItem::ItemAcceptsInputMethod)) {
+         d->sendEvent(d->focusItem, event);
++        return;
++    }
++    if (d->lastFocusItem && d->lastFocusItem != d->focusItem && (d->lastFocusItem->flags() & QGraphicsItem::ItemAcceptsInputMethod))
++        d->sendEvent(d->lastFocusItem, event);
+ }
+ 
+ /*!
+Index: qtbase_temp/tests/auto/widgets/graphicsview/qgraphicsscene/tst_qgraphicsscene.cpp
+===================================================================
+--- qtbase_temp.orig/tests/auto/widgets/graphicsview/qgraphicsscene/tst_qgraphicsscene.cpp
++++ qtbase_temp/tests/auto/widgets/graphicsview/qgraphicsscene/tst_qgraphicsscene.cpp
+@@ -289,7 +289,7 @@ private slots:
+     void taskQTBUG_15977_renderWithDeviceCoordinateCache();
+     void taskQTBUG_16401_focusItem();
+     void taskQTBUG_42915_focusNextPrevChild();
+-
++    void taskQTBUG_85088_previewTextfailWhenLostFocus();
+ private:
+     QRect m_availableGeometry = QGuiApplication::primaryScreen()->availableGeometry();
+     QSize m_testSize;
+@@ -3868,7 +3868,7 @@ void tst_QGraphicsScene::inputMethod()
+ 
+     item->eventCalls = 0;
+     QCoreApplication::sendEvent(&scene, &event);
+-    QCOMPARE(item->eventCalls, 0);
++    QCOMPARE(item->eventCalls, callFocusItem ? 1 : 0);
+ 
+     item->queryCalls = 0;
+     scene.inputMethodQuery(Qt::InputMethodQuery(0));
+@@ -3943,6 +3943,40 @@ void tst_QGraphicsScene::dispatchHoverOn
+     }
+ }
+ 
++void tst_QGraphicsScene::taskQTBUG_85088_previewTextfailWhenLostFocus()
++{
++    QString str = "simpleTextItem";
++    QGraphicsScene scene;
++    QGraphicsView view(&scene);
++
++    QGraphicsTextItem *simpleTextItem = new QGraphicsTextItem;
++    simpleTextItem->setFlag(QGraphicsTextItem::ItemIsFocusScope);
++    simpleTextItem->setTextInteractionFlags(Qt::TextEditorInteraction);
++    simpleTextItem->setPlainText(str);
++    scene.addItem(simpleTextItem);
++
++    scene.setFocusItem(simpleTextItem);
++    view.setGeometry(100, 100, 600, 400);
++    view.show();
++
++    QInputMethodEvent inputEvent;
++    QString &preedictStr = const_cast<QString &>(inputEvent.preeditString());
++    preedictStr = str;
++    QApplication::sendEvent(&scene, &inputEvent);
++    QCOMPARE(simpleTextItem->toPlainText(), str);
++
++    // focusItem will lose focus
++    QMouseEvent pressEvent(QEvent::MouseButtonPress, QPointF(0, 0),
++                           Qt::LeftButton, Qt::NoButton, Qt::NoModifier);
++    QApplication::sendEvent(view.viewport(), &pressEvent);
++
++    preedictStr.clear();
++    inputEvent.setCommitString(str);
++    QApplication::sendEvent(&scene, &inputEvent);
++    QCOMPARE(simpleTextItem->toPlainText(), str + str);
++}
++
++
+ void tst_QGraphicsScene::initialFocus_data()
+ {
+     QTest::addColumn<bool>("activeScene");

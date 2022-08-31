@@ -1,0 +1,21 @@
+Author: Fan RuiJie <fanruijie@uniontech.com>
+Date:   Tue Aug 31 16:13:10 2021 +0800
+Subject: fix text ellipsis not implemented in Tibetan
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/367457
+
+Index: qtbase-opensource-src/src/gui/text/qtextengine.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/gui/text/qtextengine.cpp
++++ qtbase-opensource-src/src/gui/text/qtextengine.cpp
+@@ -3254,6 +3254,11 @@ QString QTextEngine::elidedText(Qt::Text
+ 
+                 ellipsisWidth *= 3;
+                 ellipsisText = QStringLiteral("...");
++            } else {
++                engine = fnt.d->engineForScript(QChar::Script_Common);
++                glyph = engine->glyphIndex(ellipsisChar.unicode());
++                engine->recalcAdvances(&glyphs, { });
++                ellipsisText = ellipsisChar;
+             }
+         }
+     }

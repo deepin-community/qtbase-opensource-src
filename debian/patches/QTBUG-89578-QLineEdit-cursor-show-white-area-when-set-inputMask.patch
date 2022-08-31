@@ -1,0 +1,25 @@
+From: zhanghao <zhanghao@uniontech.com>
+Date:   Fri Jan 29 09:55:25 2021 +0800
+Subject: fix QLineEdit Cursor Rect and InputMask area overlapping,
+the cursor rect area is white. when inputMask is set,we don't
+need draw cursor.
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/327468
+---
+
+Index: qtbase-opensource-src-uos-5.15.1/src/widgets/widgets/qlineedit.cpp
+===================================================================
+--- qtbase-opensource-src-uos-5.15.1.orig/src/widgets/widgets/qlineedit.cpp
++++ qtbase-opensource-src-uos-5.15.1/src/widgets/widgets/qlineedit.cpp
+@@ -2082,8 +2082,10 @@ void QLineEdit::paintEvent(QPaintEvent *
+ 
+     // Asian users see an IM selection text as cursor on candidate
+     // selection phase of input method, so the ordinary cursor should be
+-    // invisible if we have a preedit string.
+-    if (d->cursorVisible && !d->control->isReadOnly())
++    // invisible if we have a preedit string. another condition is when inputmask
++    // isn't empty,we don't need draw cursor,because cursor and character overlaping
++    // area is white.
++    if (d->cursorVisible && !d->control->isReadOnly() && d->control->inputMask().isEmpty())
+         flags |= QWidgetLineControl::DrawCursor;
+ 
+     d->control->setCursorWidth(style()->pixelMetric(QStyle::PM_TextCursorWidth, &panel));

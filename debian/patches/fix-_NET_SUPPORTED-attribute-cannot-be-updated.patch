@@ -1,0 +1,19 @@
+From: Tang Haixiang <tanghaixiang@uniontech.com>
+Date: Thu, 25 Feb 2021 14:00:00 +0800
+Subject: Fix-_NET_SUPPORTED-attribute-cannot-be-updated
+
+---
+
+Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbconnection.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/plugins/platforms/xcb/qxcbconnection.cpp
++++ qtbase-opensource-src/src/plugins/platforms/xcb/qxcbconnection.cpp
+@@ -659,6 +659,8 @@ void QXcbConnection::handleXcbEvent(xcb_
+             QXcbVirtualDesktop *virtualDesktop = virtualDesktopForRootWindow(propertyNotify->window);
+             if (virtualDesktop)
+                 virtualDesktop->updateWorkArea();
++        } else if(propertyNotify->atom == atom(QXcbAtom::_NET_SUPPORTED)) {
++            m_wmSupport->updateNetWMAtoms();
+         } else {
+             HANDLE_PLATFORM_WINDOW_EVENT(xcb_property_notify_event_t, window, handlePropertyNotifyEvent);
+         }

@@ -1,0 +1,2 @@
+# This dependency has been added to track external packages building against
+qt5-qmake: python-script-but-no-python-dep usr/lib/x86_64-linux-gnu/qt5/mkspecs/features/uikit/devices.py #!/usr/bin/python

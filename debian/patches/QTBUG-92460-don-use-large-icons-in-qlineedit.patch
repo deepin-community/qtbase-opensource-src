@@ -1,0 +1,21 @@
+From: Tang Haixiang <tanghaixiang@uniontech.com>
+Date: Tue May 18 10:08:13 2021 +0800
+Subject: Fusion style: don't use large icons in QLineEdit
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/342038
+
+---
+
+Index: qtbase-opensource-src/src/widgets/styles/qfusionstyle.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/styles/qfusionstyle.cpp
++++ qtbase-opensource-src/src/widgets/styles/qfusionstyle.cpp
+@@ -3052,9 +3052,6 @@ int QFusionStyle::pixelMetric(PixelMetri
+     case PM_ListViewIconSize:
+         val = 24;
+         break;
+-    case PM_LineEditIconSize:
+-        val = 24;
+-        break;
+     case PM_DialogButtonsSeparator:
+     case PM_ScrollBarSliderMin:
+         val = 26;

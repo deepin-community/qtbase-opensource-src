@@ -1,0 +1,28 @@
+Author: Tang Haixiang <tanghaixiang@uniontech.com>
+Date:   Tue Apr 20 14:10:57 2021 +0800
+Subject: fix Draw the cursor considering the descent is 0
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/342138
+
+---
+
+Index: qtbase-opensource-src/src/gui/text/qtextlayout.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/gui/text/qtextlayout.cpp
++++ qtbase-opensource-src/src/gui/text/qtextlayout.cpp
+@@ -1325,13 +1325,13 @@ void QTextLayout::drawCursor(QPainter *p
+     bool rightToLeft = d->isRightToLeft();
+     if (itm >= 0) {
+         const QScriptItem &si = d->layoutData->items.at(itm);
+-        if (si.ascent > 0)
++        if (si.ascent >= 0)
+             base = si.ascent;
+-        if (si.descent > 0)
++        if (si.descent >= 0)
+             descent = si.descent;
+         rightToLeft = si.analysis.bidiLevel % 2;
+     }
+-    qreal y = position.y() + (sl.y + sl.base() - base).toReal();
++    qreal y = position.y() + (sl.y + sl.base() + sl.descent - base - descent).toReal();
+     bool toggleAntialiasing = !(p->renderHints() & QPainter::Antialiasing)
+                               && (p->transform().type() > QTransform::TxTranslate);
+     if (toggleAntialiasing)

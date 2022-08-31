@@ -1,0 +1,69 @@
+Author: Zhang Hao <zhanghao@uniontech.com>
+Date:   Thu Dec 30 13:25:52 2021 +0800
+Subject: Test result of qobject_cast before dereferencing
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/380906
+
+---
+
+Index: qtbase-opensource-src/src/widgets/widgets/qmainwindow.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/widgets/qmainwindow.cpp
++++ qtbase-opensource-src/src/widgets/widgets/qmainwindow.cpp
+@@ -523,10 +523,10 @@ void QMainWindow::setMenuBar(QMenuBar *m
+ {
+     QLayout *topLayout = layout();
+ 
+-    if (topLayout->menuBar() && topLayout->menuBar() != menuBar) {
++    if (QWidget *existingMenuBar = topLayout->menuBar(); existingMenuBar && existingMenuBar != menuBar) {
+         // Reparent corner widgets before we delete the old menu bar.
+-        QMenuBar *oldMenuBar = qobject_cast<QMenuBar *>(topLayout->menuBar());
+-        if (menuBar) {
++        QMenuBar *oldMenuBar = qobject_cast<QMenuBar *>(existingMenuBar);
++        if (oldMenuBar && menuBar) {
+             // TopLeftCorner widget.
+             QWidget *cornerWidget = oldMenuBar->cornerWidget(Qt::TopLeftCorner);
+             if (cornerWidget)
+@@ -536,9 +536,9 @@ void QMainWindow::setMenuBar(QMenuBar *m
+             if (cornerWidget)
+                 menuBar->setCornerWidget(cornerWidget, Qt::TopRightCorner);
+         }
+-        oldMenuBar->hide();
+-        oldMenuBar->setParent(nullptr);
+-        oldMenuBar->deleteLater();
++        existingMenuBar->hide();
++        existingMenuBar->setParent(nullptr);
++        existingMenuBar->deleteLater();
+     }
+     topLayout->setMenuBar(menuBar);
+ }
+Index: qtbase-opensource-src/tests/auto/widgets/widgets/qmainwindow/tst_qmainwindow.cpp
+===================================================================
+--- qtbase-opensource-src.orig/tests/auto/widgets/widgets/qmainwindow/tst_qmainwindow.cpp
++++ qtbase-opensource-src/tests/auto/widgets/widgets/qmainwindow/tst_qmainwindow.cpp
+@@ -110,6 +110,7 @@ private slots:
+     void iconSize();
+     void toolButtonStyle();
+     void menuBar();
++    void customMenuBar();
+     void centralWidget();
+     void takeCentralWidget();
+     void corner();
+@@ -671,6 +672,18 @@ void tst_QMainWindow::menuBar()
+     }
+ }
+ 
++// QTBUG-98247
++void tst_QMainWindow::customMenuBar()
++{
++    QMainWindow w;
++    std::unique_ptr<QWidget> menuWidget(new QWidget);
++    w.setMenuWidget(menuWidget.get());
++    QVERIFY(menuWidget->parentWidget());
++    QVERIFY(w.menuBar()); // implicitly calls setMenuBar
++    QVERIFY(!menuWidget->parentWidget());
++    menuWidget.reset();
++}
++
+ #ifdef QT_BUILD_INTERNAL
+ void tst_QMainWindow::statusBar()
+ {

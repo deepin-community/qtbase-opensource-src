@@ -1,0 +1,75 @@
+From: Tang Haixiang <tanghaixiang@uniontech.com>
+Date: Fri Mar 12 11:08:13 2021 +0800
+Subject: Add setting the ICON size attribute in lineedit to the style plugin
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/337970
+
+---
+
+Index: qtbase-opensource-src/src/widgets/styles/qcommonstyle.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/styles/qcommonstyle.cpp
++++ qtbase-opensource-src/src/widgets/styles/qcommonstyle.cpp
+@@ -4832,6 +4832,9 @@ QT_WARNING_POP
+     case PM_IconViewIconSize:
+         ret = proxy()->pixelMetric(PM_LargeIconSize, opt, widget);
+         break;
++    case PM_LineEditIconSize:
++        ret = proxy()->pixelMetric(PM_SmallIconSize, opt, widget);
++        break;
+ 
+     case PM_LargeIconSize:
+         ret = int(QStyleHelper::dpiScaled(32, opt));
+Index: qtbase-opensource-src/src/widgets/styles/qfusionstyle.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/styles/qfusionstyle.cpp
++++ qtbase-opensource-src/src/widgets/styles/qfusionstyle.cpp
+@@ -3052,6 +3052,9 @@ int QFusionStyle::pixelMetric(PixelMetri
+     case PM_ListViewIconSize:
+         val = 24;
+         break;
++    case PM_LineEditIconSize:
++        val = 24;
++        break;
+     case PM_DialogButtonsSeparator:
+     case PM_ScrollBarSliderMin:
+         val = 26;
+Index: qtbase-opensource-src/src/widgets/styles/qstyle.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/styles/qstyle.cpp
++++ qtbase-opensource-src/src/widgets/styles/qstyle.cpp
+@@ -1501,6 +1501,9 @@ void QStyle::drawItemPixmap(QPainter *pa
+     \value PM_TitleBarButtonSize The size of buttons on a title bar.
+            This enum value has been introduced in Qt 5.8.
+ 
++    \value PM_LineEditIconSize The default size for icons in a line edit.
++           This enum value has been introduced in Qt 6.2.
++
+     \value PM_CustomBase Base value for custom pixel metrics.  Custom
+     values must be greater than this value.
+ 
+Index: qtbase-opensource-src/src/widgets/styles/qstyle.h
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/styles/qstyle.h
++++ qtbase-opensource-src/src/widgets/styles/qstyle.h
+@@ -587,6 +587,8 @@ public:
+         PM_TitleBarButtonIconSize,
+         PM_TitleBarButtonSize,
+ 
++        PM_LineEditIconSize,
++
+         // do not add any values below/greater than this
+         PM_CustomBase = 0xf0000000
+     };
+Index: qtbase-opensource-src/src/widgets/widgets/qlineedit_p.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/widgets/qlineedit_p.cpp
++++ qtbase-opensource-src/src/widgets/widgets/qlineedit_p.cpp
+@@ -503,7 +503,7 @@ QLineEditPrivate::SideWidgetParameters Q
+ {
+     Q_Q(const QLineEdit);
+     SideWidgetParameters result;
+-    result.iconSize = q->style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, q);
++    result.iconSize = q->style()->pixelMetric(QStyle::PM_LineEditIconSize, nullptr, q);
+     
+     bool ok = true;
+     int margin = q->property("_d_dtk_lineeditActionMargin").toInt(&ok);

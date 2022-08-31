@@ -1,0 +1,14 @@
+Index: qtbase-opensource-src/src/gui/kernel/qplatformscreen.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/gui/kernel/qplatformscreen.cpp
++++ qtbase-opensource-src/src/gui/kernel/qplatformscreen.cpp
+@@ -189,6 +189,8 @@ QDpi QPlatformScreen::logicalDpi() const
+     QSizeF ps = physicalSize();
+     QSize s = geometry().size();
+ 
++    if (qFuzzyIsNull(ps.width()) || qFuzzyIsNull(ps.height()))
++        return QDpi(96, 96);
+     return QDpi(25.4 * s.width() / ps.width(),
+                 25.4 * s.height() / ps.height());
+ }
+

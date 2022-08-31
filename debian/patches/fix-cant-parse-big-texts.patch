@@ -1,0 +1,17 @@
+Index: qtbase_temp/src/plugins/platforms/xcb/qxcbclipboard.cpp
+===================================================================
+--- qtbase_temp.orig/src/plugins/platforms/xcb/qxcbclipboard.cpp
++++ qtbase_temp/src/plugins/platforms/xcb/qxcbclipboard.cpp
+@@ -865,7 +865,11 @@ QByteArray QXcbClipboard::clipboardReadI
+                 offset += length;
+             }
+         } else {
+-            break;
++            //waitForClipboardEvent等待到的事件不一定有效，事件队列中还存在其它有效
++            //事件等待获取，此处应当继续wait事件，而不是直接break
++	    //正确的改法应当是在wait事件时，判断事件队列中是否存在此窗口属性被删除
++	    //的消息，如果有，应当抛弃这次wait到的时间，转而继续wait
++            //break;
+         }
+     }
+ 

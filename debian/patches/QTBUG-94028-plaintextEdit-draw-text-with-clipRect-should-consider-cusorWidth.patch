@@ -1,0 +1,19 @@
+Author: Zhang Hao <zhanghao@uniontech.com>
+Date:   Mon Nov 8 09:38:07 2021 +0800
+Subject: fix plaintextEdit draw text with clipRect should consider cusorWidth
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/380159
+---
+
+Index: qtbase-opensource-src/src/widgets/widgets/qplaintextedit.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/widgets/qplaintextedit.cpp
++++ qtbase-opensource-src/src/widgets/widgets/qplaintextedit.cpp
+@@ -1922,7 +1922,7 @@ void QPlainTextEdit::paintEvent(QPaintEv
+ 
+     // keep right margin clean from full-width selection
+     int maxX = offset.x() + qMax((qreal)viewportRect.width(), maximumWidth)
+-               - document()->documentMargin();
++               - document()->documentMargin() + cursorWidth();
+     er.setRight(qMin(er.right(), maxX));
+     painter.setClipRect(er);
+ 

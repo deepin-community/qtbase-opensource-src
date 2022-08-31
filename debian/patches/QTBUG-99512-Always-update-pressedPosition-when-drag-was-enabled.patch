@@ -1,0 +1,58 @@
+Author: Zhang Hao <zhanghao@uniontech.com>
+Date:   Thu Feb 10 15:14:18 2022 +0800
+Subject: Always update pressedPosition when drag was enabled
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/388076
+---
+
+Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/itemviews/qabstractitemview.cpp
++++ qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
+@@ -1787,9 +1787,16 @@ void QAbstractItemView::mousePressEvent(
+     QItemSelectionModel::SelectionFlags command = selectionCommand(index, event);
+     d->noSelectionOnMousePress = command == QItemSelectionModel::NoUpdate || !index.isValid();
+     QPoint offset = d->offset();
+-    d->pressedPosition = d->draggedPosition = pos + offset;
+-    if (!(command & QItemSelectionModel::Current))
++    d->draggedPosition = pos + offset;
++
++    // update the pressed position when drag was enable
++    if (d->dragEnabled)
++        d->pressedPosition = d->draggedPosition;
++
++    if (!(command & QItemSelectionModel::Current)) {
++        d->pressedPosition = pos + offset;
+         d->currentSelectionStartIndex = index;
++    }
+ 
+     else if (!d->currentSelectionStartIndex.isValid())
+         d->currentSelectionStartIndex = currentIndex();
+@@ -1810,7 +1817,7 @@ void QAbstractItemView::mousePressEvent(
+             command |= d->ctrlDragSelectionFlag;
+         }
+ 
+-        if ((command & QItemSelectionModel::Current) == 0) {
++        if (!(command & QItemSelectionModel::Current)) {
+             setSelection(QRect(pos, QSize(1, 1)), command);
+         } else {
+             QRect rect(visualRect(d->currentSelectionStartIndex).center(), pos);
+@@ -1895,16 +1902,10 @@ void QAbstractItemView::mouseMoveEvent(Q
+         || edit(index, NoEditTriggers, event))
+         return;
+ 
+-    if (d->selectionMode != SingleSelection) {
+-        // Use the current selection start index if it is valid as this will be based on the
+-        // start of the selection and not the last item being pressed which can be different
+-        // when in extended selection
+-        topLeft = d->currentSelectionStartIndex.isValid()
+-                ? visualRect(d->currentSelectionStartIndex).center()
+-                : d->pressedPosition - d->offset();
+-    } else {
++    if (d->selectionMode != SingleSelection)
++        topLeft = d->pressedPosition - d->offset();
++    else
+         topLeft = bottomRight;
+-    }
+ 
+     d->checkMouseMove(index);
+ 

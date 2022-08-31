@@ -1,0 +1,23 @@
+Author: Duan Ting <duanting@uniontech.com>
+Date:   Thu June 30 17:45:18 2022 +0800
+Subject: Avoid adding null-objects to the icon cache
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/343396
+---
+
+Index: qtbase-opensource-src/src/gui/image/qicon.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/gui/image/qicon.cpp
++++ qtbase-opensource-src/src/gui/image/qicon.cpp
+@@ -1311,9 +1311,9 @@ QIcon QIcon::fromTheme(const QString &na
+         bool hasUserTheme = QIconLoader::instance()->hasUserTheme();
+         QIconEngine * const engine = (platformTheme && !hasUserTheme) ? platformTheme->createIconEngine(name)
+                                                    : new QIconLoaderEngine(name);
+-        QIcon *cachedIcon  = new QIcon(engine);
+-        icon = *cachedIcon;
+-        qtIconCache()->insert(name, cachedIcon);
++        icon = QIcon(engine);
++        if (!icon.isNull())
++            qtIconCache()->insert(name, new QIcon(icon));
+     }
+ 
+     return icon;

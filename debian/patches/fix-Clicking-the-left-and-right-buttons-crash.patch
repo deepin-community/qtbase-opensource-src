@@ -1,0 +1,30 @@
+From c4aba54472a19a57adbc5bb0111b3c55c3b9043b Mon Sep 17 00:00:00 2001
+From: luyaning <luyaning@uniontech.com>
+Date: Thu, 4 Jun 2020 14:24:00 +0800
+Subject: [PATCH] fix:Clicking the left and right buttons simultaneously causes
+ a crash
+
+---
+ src/platformsupport/linuxaccessibility/atspiadaptor.cpp | 6 ++++++
+ 1 file changed, 6 insertions(+)
+
+diff --git a/src/platformsupport/linuxaccessibility/atspiadaptor.cpp b/src/platformsupport/linuxaccessibility/atspiadaptor.cpp
+index 580cf0e3..235bd715 100644
+--- a/src/platformsupport/linuxaccessibility/atspiadaptor.cpp
++++ b/src/platformsupport/linuxaccessibility/atspiadaptor.cpp
+@@ -803,6 +803,12 @@ void AtSpiAdaptor::windowActivated(QObject* window, bool active)
+         return;
+ 
+     QAccessibleInterface *iface = QAccessible::queryAccessibleInterface(window);
++    /*!
++        The window has been quickly activated or disabled will cause a crash.
++    */
++    if (iface == nullptr)
++        return;
++        
+     Q_ASSERT(iface);
+     Q_ASSERT(!active || iface->isValid());
+ 
+-- 
+2.20.1
+

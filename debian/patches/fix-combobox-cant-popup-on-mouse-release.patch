@@ -1,0 +1,34 @@
+Description: Fix combobox can't popup listview on the mouse button release
+ If the QStyleHints::setFocusOnTouchRelease is true
+ .
+ qtbase-opensource-src (5.11.3.5-1+deepin) unstable; urgency=low
+ .
+   * ['Autobuild release-candidate: ec09ce1048e94cf8dd2c7cd3723325975c1092b1']
+Author: zccrs <zccrs@live.com>
+
+---
+The information above should follow the Patch Tagging Guidelines, please
+checkout http://dep.debian.net/deps/dep3/ to learn about the format. Here
+are templates for supplementary fields that you might want to add:
+
+Origin: <vendor|upstream|other>, <url of original patch>
+Bug: https://bugreports.qt.io/browse/QTBUG-81095
+Bug-Debian: https://bugs.debian.org/<bugnumber>
+Bug-Ubuntu: https://launchpad.net/bugs/<bugnumber>
+Forwarded: <no|not-needed|url proving that it has been forwarded>
+Reviewed-By: <name and email of someone who approved the patch>
+Last-Update: 2020-01-06
+
+--- qtbase-opensource-src-5.11.3.5.orig/src/widgets/widgets/qcombobox.cpp
++++ qtbase-opensource-src-5.11.3.5/src/widgets/widgets/qcombobox.cpp
+@@ -3189,8 +3190,9 @@ void QComboBox::mouseReleaseEvent(QMouse
+ {
+     Q_D(QComboBox);
+     d->updateArrow(QStyle::State_None);
+-    if (QGuiApplication::styleHints()->setFocusOnTouchRelease() && hasFocus())
++    if (QGuiApplication::styleHints()->setFocusOnTouchRelease() && (hasFocus() || !(focusPolicy() & Qt::ClickFocus))) {
+         d->showPopupFromMouseEvent(e);
++    }
+ }
+ 
+ /*!

@@ -1,0 +1,44 @@
+Author: Fan RuiJie <fanruijie@uniontech.com>
+Date:   Mon June 07 11:26:24 2021 +0800
+Subject: Fix misplacement of placeholder text in QLineEdit with RTL content
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/352703
+
+Index: 515/src/widgets/widgets/qlineedit_p.cpp
+===================================================================
+--- 515.orig/src/widgets/widgets/qlineedit_p.cpp
++++ 515/src/widgets/widgets/qlineedit_p.cpp
+@@ -694,10 +694,18 @@ static int effectiveTextMargin(int defau
+     if (widgets.empty())
+         return defaultMargin;
+ 
+-    return defaultMargin + (parameters.margin + parameters.widgetWidth) *
+-           int(std::count_if(widgets.begin(), widgets.end(),
++    const auto visibleSideWidgetCount = std::count_if(widgets.begin(), widgets.end(),
+                              [](const QLineEditPrivate::SideWidgetEntry &e) {
+-                                 return e.widget->isVisibleTo(e.widget->parentWidget()); }));
++#if QT_CONFIG(animation)
++        // a button that's fading out doesn't get any space
++        if (auto* iconButton = qobject_cast<QLineEditIconButton*>(e.widget))
++            return iconButton->needsSpace();
++
++#endif
++        return e.widget->isVisibleTo(e.widget->parentWidget());
++    });
++
++    return defaultMargin + (parameters.margin + parameters.widgetWidth) * visibleSideWidgetCount;
+ }
+ 
+ QMargins QLineEditPrivate::effectiveTextMargins() const
+Index: 515/src/widgets/widgets/qlineedit_p.h
+===================================================================
+--- 515.orig/src/widgets/widgets/qlineedit_p.h
++++ 515/src/widgets/widgets/qlineedit_p.h
+@@ -95,6 +95,8 @@ public:
+ 
+     bool shouldHideWithText() const;
+     void setHideWithText(bool hide);
++    // m_wasHidden is true unless the button is fading out
++    bool needsSpace() const { return m_wasHidden; }
+ #endif
+ 
+ protected:

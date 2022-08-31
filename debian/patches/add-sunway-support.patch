@@ -1,0 +1,125 @@
+Description: add sunway support
+Author: Miao Changwei <miaochangwei@uniontech.com>
+
+---
+Last-Update: 2022-05-06
+
+--- qtbase-opensource-src-5.15.3.orig/src/3rdparty/double-conversion/include/double-conversion/utils.h
++++ qtbase-opensource-src-5.15.3/src/3rdparty/double-conversion/include/double-conversion/utils.h
+@@ -102,7 +102,8 @@ int main(int argc, char** argv) {
+     defined(__AARCH64EL__) || defined(__aarch64__) || defined(__AARCH64EB__) || \
+     defined(__riscv) || \
+     defined(__or1k__) || defined(__arc__) || \
+-    defined(__EMSCRIPTEN__)
++    defined(__EMSCRIPTEN__) || \
++    defined(__sw_64__)
+ #define DOUBLE_CONVERSION_CORRECT_DOUBLE_OPERATIONS 1
+ #elif defined(__mc68000__) || \
+     defined(__pnacl__) || defined(__native_client__)
+--- qtbase-opensource-src-5.15.3/src/3rdparty/forkfd/forkfd_linux.c
++++ qtbase-opensource-src-5.15.3/src/3rdparty/forkfd/forkfd_linux.c
+@@ -82,7 +82,8 @@ static int sys_clone(unsigned long clone
+     return syscall(__NR_clone, cloneflags, child_stack, stack_size, ptid, newtls, ctid);
+ #elif defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__mips__) || \
+     defined(__nds32__) || defined(__hppa__) || defined(__powerpc__) || defined(__i386__) || \
+-    defined(__x86_64__) || defined(__xtensa__) || defined(__alpha__) || defined(__riscv)
++    defined(__x86_64__) || defined(__xtensa__) || defined(__alpha__) || defined(__riscv) || \
++    defined(__sw_64__)
+     /* ctid and newtls are inverted on CONFIG_CLONE_BACKWARDS architectures,
+      * but since both values are 0, there's no harm. */
+     return syscall(__NR_clone, cloneflags, child_stack, ptid, ctid, newtls);
+--- qtbase-opensource-src-5.15.3.orig/src/3rdparty/sha3/brg_endian.h
++++ qtbase-opensource-src-5.15.3/src/3rdparty/sha3/brg_endian.h
+@@ -108,7 +108,7 @@ Changes for ARM 9/9/2010 [Downstream rel
+       defined( __i386__ )  || defined( _M_I86 )  || defined( _M_IX86 )    || \
+       defined( __OS2__ )   || defined( sun386 )  || defined( __TURBOC__ ) || \
+       defined( vax )       || defined( vms )     || defined( VMS )        || \
+-      defined( __VMS )     || defined( _M_X64 )
++      defined( __VMS )     || defined( _M_X64 )  || defined( __sw_64__ )
+ #  define PLATFORM_BYTE_ORDER IS_LITTLE_ENDIAN
+ 
+ #elif defined( AMIGA )   || defined( applec )    || defined( __AS400__ )  || \
+--- qtbase-opensource-src-5.15.3.orig/src/corelib/io/qfilesystemwatcher_inotify.cpp
++++ qtbase-opensource-src-5.15.3/src/corelib/io/qfilesystemwatcher_inotify.cpp
+@@ -91,7 +91,7 @@
+ # define __NR_inotify_add_watch 285
+ # define __NR_inotify_rm_watch  286
+ # define __NR_inotify_init1     324
+-#elif defined (__alpha__)
++#elif defined (__alpha__) || defined (__sw_64__)
+ # define __NR_inotify_init      444
+ # define __NR_inotify_add_watch 445
+ # define __NR_inotify_rm_watch  446
+--- qtbase-opensource-src-5.15.3.orig/src/testlib/3rdparty/cycle_p.h
++++ qtbase-opensource-src-5.15.3/src/testlib/3rdparty/cycle_p.h
+@@ -442,6 +442,22 @@ INLINE_ELAPSED(__inline__)
+ #endif
+ 
+ /*----------------------------------------------------------------*/
++#if defined(__GNUC__) && defined(__sw_64__) && !defined(HAVE_TICK_COUNTER)
++typedef unsigned long CycleCounterTicks;
++
++static __inline__ CycleCounterTicks getticks(void)
++{
++     CycleCounterTicks ret;
++     __asm__ __volatile__ ("rtc %0" : "=r"(ret));
++     return ret;
++}
++
++INLINE_ELAPSED(__inline__)
++
++#define HAVE_TICK_COUNTER
++#endif
++
++/*----------------------------------------------------------------*/
+ #if (defined(__DECC) || defined(__DECCXX)) && defined(__alpha) && defined(HAVE_C_ASM_H) && !defined(HAVE_TICK_COUNTER)
+ #  include <c_asm.h>
+ typedef unsigned int CycleCounterTicks;
+--- qtbase-opensource-src-5.15.3.orig/src/corelib/global/qprocessordetection.h
++++ qtbase-opensource-src-5.15.3/src/corelib/global/qprocessordetection.h
+@@ -335,6 +335,16 @@
+ #  endif
+ #  define Q_BYTE_ORDER Q_BIG_ENDIAN
+ 
++/*
++    Sunway (sw_64) family
++
++    Sunway is little-endian only.
++*/
++#elif defined(__sw_64__)
++#  define Q_PROCESSOR_SW_64
++#  define Q_BYTE_ORDER Q_LITTLE_ENDIAN
++#  define Q_PROCESSOR_WORDSIZE   8
++
+ // -- Web Assembly --
+ #elif defined(__EMSCRIPTEN__)
+ #  define Q_PROCESSOR_WASM
+--- qtbase-opensource-src-5.15.3.orig/src/corelib/global/archdetect.cpp
++++ qtbase-opensource-src-5.15.3/src/corelib/global/archdetect.cpp
+@@ -83,6 +83,8 @@
+ #  define ARCH_PROCESSOR "sparcv9"
+ #elif defined(Q_PROCESSOR_SPARC)
+ #  define ARCH_PROCESSOR "sparc"
++#elif defined(Q_PROCESSOR_SW_64)
++#  define ARCH_PROCESSOR "sw_64"
+ #else
+ #  define ARCH_PROCESSOR "unknown"
+ #endif
+--- qtbase-opensource-src-5.15.3.orig/src/corelib/global/qglobal.cpp
++++ qtbase-opensource-src-5.15.3/src/corelib/global/qglobal.cpp
+@@ -2017,6 +2017,15 @@ bool qSharedBuild() noexcept
+ */
+ 
+ /*!
++    \macro Q_PROCESSOR_SW_64
++    \relates <QtGlobal>
++
++    Defined if the application is compiled for Sunway (sw_64) processors.
++
++    \sa QSysInfo::buildCpuArchitecture()
++*/
++
++/*!
+     \macro Q_PROCESSOR_X86
+     \relates <QtGlobal>
+ 

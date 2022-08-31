@@ -1,0 +1,42 @@
+Author: Zhang Hao <zhanghao@uniontech.com>
+Date:   Mon Mar 14 15:26:27 2022 +0800
+Subject: Show the year correctly after it has been edited
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/318681
+
+---
+
+Index: qtbase-opensource-src/src/widgets/widgets/qcalendarwidget.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/widgets/qcalendarwidget.cpp
++++ qtbase-opensource-src/src/widgets/widgets/qcalendarwidget.cpp
+@@ -1928,7 +1928,6 @@ void QCalendarWidgetPrivate::_q_nextMont
+ void QCalendarWidgetPrivate::_q_yearEditingFinished()
+ {
+     Q_Q(QCalendarWidget);
+-    yearButton->setText(q->locale().toString(yearEdit->value()));
+     yearEdit->hide();
+     q->setFocusPolicy(oldFocusPolicy);
+     qApp->removeEventFilter(q);
+@@ -1937,6 +1936,7 @@ void QCalendarWidgetPrivate::_q_yearEdit
+     QDate currentDate = getCurrentDate();
+     int newYear = q->locale().toInt(yearEdit->text());
+     currentDate = currentDate.addYears(newYear - currentDate.year(m_model->m_calendar), m_model->m_calendar);
++    yearButton->setText(q->locale().toString(currentDate, u"yyyy", m_model->m_calendar));
+     updateCurrentPage(currentDate);
+ }
+ 
+Index: qtbase-opensource-src/tests/auto/widgets/widgets/qcalendarwidget/tst_qcalendarwidget.cpp
+===================================================================
+--- qtbase-opensource-src.orig/tests/auto/widgets/widgets/qcalendarwidget/tst_qcalendarwidget.cpp
++++ qtbase-opensource-src/tests/auto/widgets/widgets/qcalendarwidget/tst_qcalendarwidget.cpp
+@@ -188,6 +188,10 @@ void tst_QCalendarWidget::buttonClickChe
+     QTest::mouseMove(widget);
+     QTest::mouseClick(widget, Qt::LeftButton);
+     QCOMPARE(2006, object.yearShown());
++    QTest::mouseClick(button, Qt::LeftButton, Qt::NoModifier, button->rect().center(), 2);
++    QTest::mouseMove(widget);
++    QTest::mouseClick(widget, Qt::LeftButton);
++    QCOMPARE(button->text(), "2006"); // Check that it is shown as a year should be
+     object.setSelectedDate(selectedDate);
+     object.showSelectedDate();
+     QTest::keyClick(widget, Qt::Key_Down);

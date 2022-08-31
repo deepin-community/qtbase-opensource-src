@@ -1,0 +1,81 @@
+From: zhanghao <zhanghao@uniontech.com>
+Date:   Wed Feb 24 10:20:59 2021 +0800
+Subject: fix QDoubleSpinbox and QSpinbox not change value when mouse scroll.
+---
+
+Index: qtbase-opensource-src/src/widgets/kernel/qapplication.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/kernel/qapplication.cpp
++++ qtbase-opensource-src/src/widgets/kernel/qapplication.cpp
+@@ -114,6 +114,9 @@
+ #include <algorithm>
+ #include <iterator>
+ 
++#include <QDoubleSpinBox>
++#include <QSpinBox>
++
+ //#define ALIEN_DEBUG
+ 
+ static void initResources()
+@@ -4090,7 +4093,12 @@ void QApplicationPrivate::giveFocusAccor
+         if (focusWidget->isEnabled()
+             && focusWidget->rect().contains(localPos)
+             && QApplicationPrivate::shouldSetFocus(focusWidget, focusPolicy)) {
+-            focusWidget->setFocus(Qt::MouseFocusReason);
++            if ((qobject_cast<QDoubleSpinBox *>(focusWidget) != nullptr || qobject_cast<QSpinBox *>(focusWidget) != nullptr)
++                && event->type() == QEvent::Wheel) {
++                return;
++            }else{
++                focusWidget->setFocus(Qt::MouseFocusReason);
++            }
+             break;
+         }
+         if (focusWidget->isWindow())
+Index: qtbase-opensource-src/src/widgets/widgets/qabstractspinbox.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/widgets/qabstractspinbox.cpp
++++ qtbase-opensource-src/src/widgets/widgets/qabstractspinbox.cpp
+@@ -1167,25 +1167,27 @@ void QAbstractSpinBox::keyReleaseEvent(Q
+ void QAbstractSpinBox::wheelEvent(QWheelEvent *event)
+ {
+     Q_D(QAbstractSpinBox);
++    if (this->hasFocus()) {
+ #ifdef Q_OS_MACOS
+-    // If the event comes from a real mouse wheel, rather than a track pad
+-    // (Qt::MouseEventSynthesizedBySystem), the shift modifier changes the
+-    // scroll orientation to horizontal.
+-    // Convert horizontal events back to vertical whilst shift is held.
+-    if ((event->modifiers() & Qt::ShiftModifier)
+-            && event->source() == Qt::MouseEventNotSynthesized) {
+-        d->wheelDeltaRemainder += event->angleDelta().x();
+-    } else {
+-        d->wheelDeltaRemainder += event->angleDelta().y();
+-    }
++        // If the event comes from a real mouse wheel, rather than a track pad
++        // (Qt::MouseEventSynthesizedBySystem), the shift modifier changes the
++        // scroll orientation to horizontal.
++        // Convert horizontal events back to vertical whilst shift is held.
++        if ((event->modifiers() & Qt::ShiftModifier)
++                && event->source() == Qt::MouseEventNotSynthesized) {
++            d->wheelDeltaRemainder += event->angleDelta().x();
++        } else {
++            d->wheelDeltaRemainder += event->angleDelta().y();
++        }
+ #else
+-    d->wheelDeltaRemainder += event->angleDelta().y();
++        d->wheelDeltaRemainder += event->angleDelta().y();
+ #endif
+-    const int steps = d->wheelDeltaRemainder / 120;
+-    d->wheelDeltaRemainder -= steps * 120;
+-    if (stepEnabled() & (steps > 0 ? StepUpEnabled : StepDownEnabled))
+-        stepBy(event->modifiers() & d->stepModifier ? steps * 10 : steps);
+-    event->accept();
++        const int steps = d->wheelDeltaRemainder / 120;
++        d->wheelDeltaRemainder -= steps * 120;
++        if (stepEnabled() & (steps > 0 ? StepUpEnabled : StepDownEnabled))
++            stepBy(event->modifiers() & d->stepModifier ? steps * 10 : steps);
++        event->accept();
++    }
+ }
+ #endif
+ 

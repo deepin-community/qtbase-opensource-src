@@ -1,0 +1,58 @@
+Author: Tang Haixiang <tanghaixiang@uniontech.com>
+Date:   Fri Aug 13 9:22:24 2021 +0800
+Subject: Close all popup windows when the screen is rotated
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/363462
+
+---
+
+Index: qtbase-opensource-src/src/widgets/kernel/qapplication.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/kernel/qapplication.cpp
++++ qtbase-opensource-src/src/widgets/kernel/qapplication.cpp
+@@ -3050,8 +3050,10 @@ bool QApplication::notify(QObject *recei
+ 
+     switch (e->type()) {
+     case QEvent::ApplicationDeactivate:
+-        // Close all popups (triggers when switching applications
+-        // by pressing ALT-TAB on Windows, which is not receive as key event.
++    case QEvent::OrientationChange:
++         // Close all popups (triggers when switching applications
++         // by pressing ALT-TAB on Windows, which is not receive as key event.
++         // triggers when the screen rotates.)
+         closeAllPopups();
+         break;
+     case QEvent::Wheel: // User input and window activation makes tooltips sleep
+Index: qtbase-opensource-src/tests/auto/widgets/widgets/qmenu/tst_qmenu.cpp
+===================================================================
+--- qtbase-opensource-src.orig/tests/auto/widgets/widgets/qmenu/tst_qmenu.cpp
++++ qtbase-opensource-src/tests/auto/widgets/widgets/qmenu/tst_qmenu.cpp
+@@ -127,6 +127,7 @@ private slots:
+     void menuSize_Scrolling();
+     void tearOffMenuNotDisplayed();
+     void QTBUG_61039_menu_shortcuts();
++    void screenOrientationChangedCloseMenu();
+ 
+ protected slots:
+     void onActivated(QAction*);
+@@ -1678,5 +1679,21 @@ void tst_QMenu::QTBUG_61039_menu_shortcu
+     QTRY_COMPARE(actionJoeSpy.count(), 1);
+ }
+ 
++void tst_QMenu::screenOrientationChangedCloseMenu()
++{
++     QMenu menu;
++     menu.addAction("action1");
++     menu.show();
++     menu.screen()->setOrientationUpdateMask(Qt::PortraitOrientation | Qt::LandscapeOrientation
++                                             | Qt::InvertedPortraitOrientation | Qt::InvertedLandscapeOrientation);
++     QTRY_COMPARE(menu.isVisible(),true);
++
++     Qt::ScreenOrientation orientation = menu.screen()->orientation() == Qt::PortraitOrientation ? Qt::LandscapeOrientation : Qt::PortraitOrientation;
++     QScreenOrientationChangeEvent event(menu.screen(), orientation);
++     QCoreApplication::sendEvent(QCoreApplication::instance(), &event);
++
++     QTRY_COMPARE(menu.isVisible(),false);
++}
++
+ QTEST_MAIN(tst_QMenu)
+ #include "tst_qmenu.moc"

@@ -1,0 +1,24 @@
+Index: qtbase-opensource-src/src/widgets/styles/qstylesheetstyle.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/styles/qstylesheetstyle.cpp
++++ qtbase-opensource-src/src/widgets/styles/qstylesheetstyle.cpp
+@@ -3539,8 +3539,8 @@ void QStyleSheetStyle::drawControl(Contr
+                 const uint horizontalAlignMask = Qt::AlignHCenter | Qt::AlignLeft | Qt::AlignRight;
+                 const uint verticalAlignMask = Qt::AlignVCenter | Qt::AlignTop | Qt::AlignLeft;
+ 
+-                if (rule.hasPosition() && rule.position()->textAlignment != 0) {
+-                    Qt::Alignment textAlignment = rule.position()->textAlignment;
++                const Qt::Alignment textAlignment = rule.position()->textAlignment;
++                if (rule.hasPosition() && textAlignment != 0) {
+                     tf |= (textAlignment & verticalAlignMask) ? (textAlignment & verticalAlignMask) : Qt::AlignVCenter;
+                     tf |= (textAlignment & horizontalAlignMask) ? (textAlignment & horizontalAlignMask) : Qt::AlignHCenter;
+                     if (!styleHint(SH_UnderlineShortcut, button, w))
+@@ -3599,6 +3599,8 @@ void QStyleSheetStyle::drawControl(Contr
+                         iconRect.translate(pixelMetric(PM_ButtonShiftHorizontal, opt, w),
+                                            pixelMetric(PM_ButtonShiftVertical, opt, w));
+                     p->drawPixmap(iconRect, pixmap);
++                }else {
++                    tf |= textAlignment;
+                 }
+ 
+                 if (button->state & (State_On | State_Sunken))
