@@ -8,7 +8,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qlistview.cpp
 ===================================================================
 --- qtbase-opensource-src.orig/src/widgets/itemviews/qlistview.cpp
 +++ qtbase-opensource-src/src/widgets/itemviews/qlistview.cpp
-@@ -1813,6 +1813,7 @@ void QListViewPrivate::prepareItemsLayou
+@@ -1821,6 +1821,7 @@ void QListViewPrivate::prepareItemsLayou
      // Qt::ScrollBarAlwaysOn but scrollbar extent must be deduced if policy
      // is Qt::ScrollBarAsNeeded
      int verticalMargin = (vbarpolicy == Qt::ScrollBarAsNeeded) && (flow == QListView::LeftToRight || vbar->isVisible())
@@ -28,18 +28,18 @@ Index: qtbase-opensource-src/tests/auto/widgets/itemviews/qlistview/tst_qlistvie
  
  #include <QtTest/private/qtesthelpers_p.h>
  #include <QtWidgets/private/qlistview_p.h>
-@@ -170,6 +171,7 @@ private slots:
+@@ -171,6 +172,7 @@ private slots:
      void itemAlignment();
      void internalDragDropMove_data();
      void internalDragDropMove();
 +    void spacingWithWordWrap_data();
      void spacingWithWordWrap();
- };
+     void scrollOnRemove_data();
+     void scrollOnRemove();
+@@ -2796,11 +2798,40 @@ void tst_QListView::internalDragDropMove
+     }
+ }
  
-@@ -2771,8 +2773,37 @@ void tst_QListView::internalDragDropMove
- /*!
-     Verify fix for QTBUG-92366
- */
 +void tst_QListView::spacingWithWordWrap_data()
 +{
 +    QTest::addColumn<bool>("scrollBarOverlap");
@@ -48,6 +48,9 @@ Index: qtbase-opensource-src/tests/auto/widgets/itemviews/qlistview/tst_qlistvie
 +    QTest::addRow("With overlap") << true;
 +}
 +
+ /*!
+     Verify fix for QTBUG-92366
+ */
  void tst_QListView::spacingWithWordWrap()
  {
 +    QFETCH(bool, scrollBarOverlap);

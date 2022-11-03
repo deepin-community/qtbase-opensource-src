@@ -65,6 +65,7 @@ import android.os.Looper;
 import android.content.ClipboardManager;
 import android.content.ClipboardManager.OnPrimaryClipChangedListener;
 import android.content.ClipData;
+import android.content.ClipDescription;
 import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -97,6 +98,7 @@ public class QtNative
     public static final String QtTAG = "Qt JAVA"; // string used for Log.x
     private static ArrayList<Runnable> m_lostActions = new ArrayList<Runnable>(); // a list containing all actions which could not be performed (e.g. the main activity is destroyed, etc.)
     private static boolean m_started = false;
+    private static boolean m_isKeyboardHiding = false;
     private static int m_displayMetricsScreenWidthPixels = 0;
     private static int m_displayMetricsScreenHeightPixels = 0;
     private static int m_displayMetricsDesktopWidthPixels = 0;
@@ -611,7 +613,8 @@ public class QtNative
                                       m_displayMetricsXDpi,
                                       m_displayMetricsYDpi,
                                       m_displayMetricsScaledDensity,
-                                      m_displayMetricsDensity);
+                                      m_displayMetricsDensity,
+                                      true);
                 }
             });
             m_qtThread.post(new Runnable() {
@@ -633,7 +636,8 @@ public class QtNative
                                                     double XDpi,
                                                     double YDpi,
                                                     double scaledDensity,
-                                                    double density)
+                                                    double density,
+                                                    boolean forceUpdate)
     {
         /* Fix buggy dpi report */
         if (XDpi < android.util.DisplayMetrics.DENSITY_LOW)
@@ -650,7 +654,8 @@ public class QtNative
                                   XDpi,
                                   YDpi,
                                   scaledDensity,
-                                  density);
+                                  density,
+                                  forceUpdate);
             } else {
                 m_displayMetricsScreenWidthPixels = screenWidthPixels;
                 m_displayMetricsScreenHeightPixels = screenHeightPixels;
@@ -878,10 +883,25 @@ public class QtNative
         });
     }
 
+    private static void updateInputItemRectangle(final int x,
+                                                 final int y,
+                                                 final int w,
+                                                 final int h)
+    {
+        runAction(new Runnable() {
+            @Override
+            public void run() {
+                m_activityDelegate.updateInputItemRectangle(x, y, w, h);
+            }
+        });
+    }
+
+
     private static void showSoftwareKeyboard(final int x,
                                              final int y,
                                              final int width,
                                              final int height,
+                                             final int editorHeight,
                                              final int inputHints,
                                              final int enterKeyType)
     {
@@ -889,7 +909,7 @@ public class QtNative
             @Override
             public void run() {
                 if (m_activityDelegate != null)
-                    m_activityDelegate.showSoftwareKeyboard(x, y, width, height, inputHints, enterKeyType);
+                    m_activityDelegate.showSoftwareKeyboard(x, y, width, height, editorHeight, inputHints, enterKeyType);
             }
         });
     }
@@ -907,6 +927,7 @@ public class QtNative
 
     private static void hideSoftwareKeyboard()
     {
+        m_isKeyboardHiding = true;
         runAction(new Runnable() {
             @Override
             public void run() {
@@ -927,6 +948,13 @@ public class QtNative
                 updateWindow();
             }
         });
+    }
+
+    public static boolean isSoftwareKeyboardVisible()
+    {
+        if (m_activityDelegate == null)
+            return false;
+        return m_activityDelegate.isKeyboardVisible() && !m_isKeyboardHiding;
     }
 
     private static void notifyAccessibilityLocationChange()
@@ -965,6 +993,11 @@ public class QtNative
         });
     }
 
+    public static void notifyQtAndroidPluginRunning(final boolean running)
+    {
+        m_activityDelegate.notifyQtAndroidPluginRunning(running);
+    }
+
     private static void registerClipboardManager()
     {
         if (m_service == null || m_activity != null) { // Avoid freezing if only service
@@ -996,6 +1029,7 @@ public class QtNative
     {
         if (Build.VERSION.SDK_INT >= 28 && m_clipboardManager != null)
             m_clipboardManager.clearPrimaryClip();
+         m_usePrimaryClip = false;
     }
     private static void setClipboardText(String text)
     {
@@ -1009,10 +1043,8 @@ public class QtNative
     {
         try {
             if (m_clipboardManager != null && m_clipboardManager.hasPrimaryClip()) {
-                ClipData primaryClip = m_clipboardManager.getPrimaryClip();
-                for (int i = 0; i < primaryClip.getItemCount(); ++i)
-                    if (primaryClip.getItemAt(i).getText() != null)
-                        return true;
+                ClipDescription primaryClipDescription = m_clipboardManager.getPrimaryClipDescription();
+                return primaryClipDescription.hasMimeType("text/*");
             }
         } catch (Exception e) {
             Log.e(QtTAG, "Failed to get clipboard data", e);
@@ -1067,10 +1099,8 @@ public class QtNative
     {
         try {
             if (m_clipboardManager != null && m_clipboardManager.hasPrimaryClip()) {
-                ClipData primaryClip = m_clipboardManager.getPrimaryClip();
-                for (int i = 0; i < Objects.requireNonNull(primaryClip).getItemCount(); ++i)
-                    if (primaryClip.getItemAt(i).getHtmlText() != null)
-                        return true;
+                ClipDescription primaryClipDescription = m_clipboardManager.getPrimaryClipDescription();
+                return primaryClipDescription.hasMimeType("text/html");
             }
         } catch (Exception e) {
             Log.e(QtTAG, "Failed to get clipboard data", e);
@@ -1106,10 +1136,8 @@ public class QtNative
     {
         try {
             if (m_clipboardManager != null && m_clipboardManager.hasPrimaryClip()) {
-                ClipData primaryClip = m_clipboardManager.getPrimaryClip();
-                for (int i = 0; i < primaryClip.getItemCount(); ++i)
-                    if (primaryClip.getItemAt(i).getUri() != null)
-                        return true;
+                ClipDescription primaryClipDescription = m_clipboardManager.getPrimaryClipDescription();
+                return primaryClipDescription.hasMimeType("text/uri-list");
             }
         } catch (Exception e) {
             Log.e(QtTAG, "Failed to get clipboard data", e);
@@ -1293,6 +1321,12 @@ public class QtNative
         });
     }
 
+    public static void keyboardVisibilityUpdated(boolean visibility)
+    {
+        m_isKeyboardHiding = false;
+        keyboardVisibilityChanged(visibility);
+    }
+
     private static String[] listAssetContent(android.content.res.AssetManager asset, String path) {
         String [] list;
         ArrayList<String> res = new ArrayList<String>();
@@ -1324,7 +1358,8 @@ public class QtNative
                                                 double XDpi,
                                                 double YDpi,
                                                 double scaledDensity,
-                                                double density);
+                                                double density,
+                                                boolean forceUpdate);
     public static native void handleOrientationChanged(int newRotation, int nativeOrientation);
     // screen methods
 
