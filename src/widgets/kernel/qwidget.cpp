@@ -783,6 +783,8 @@ void QWidget::setAutoFillBackground(bool enabled)
     and a compositing window manager.
     \li Windows: The widget needs to have the Qt::FramelessWindowHint window flag set
     for the translucency to work.
+    \li \macos: The widget needs to have the Qt::FramelessWindowHint window flag set
+    for the translucency to work.
     \endlist
 
 
@@ -2958,9 +2960,9 @@ bool QWidget::isFullScreen() const
 
     Calling this function only affects \l{isWindow()}{windows}.
 
-    To return from full-screen mode, call showNormal().
+    To return from full-screen mode, call showNormal() or close().
 
-    Full-screen mode works fine under Windows, but has certain
+    \note Full-screen mode works fine under Windows, but has certain
     problems under X. These problems are due to limitations of the
     ICCCM protocol that specifies the communication between X11
     clients and the window manager. ICCCM simply does not understand
@@ -2980,7 +2982,14 @@ bool QWidget::isFullScreen() const
     X11 window managers that follow modern post-ICCCM specifications
     support full-screen mode properly.
 
-    \sa showNormal(), showMaximized(), show(), hide(), isVisible()
+    On macOS, showing a window full screen puts the entire application in
+    full-screen mode, providing it with a dedicated desktop. Showing another
+    window while the application runs in full-screen mode might automatically
+    make that window full screen as well. To prevent that, exit full-screen
+    mode by calling showNormal() or by close() on the full screen window
+    before showing another window.
+
+    \sa showNormal(), showMaximized(), show(), isVisible(), close()
 */
 void QWidget::showFullScreen()
 {
@@ -4682,7 +4691,9 @@ void QWidgetPrivate::resolveLayoutDirection()
 /*!
     \property QWidget::layoutDirection
 
-    \brief the layout direction for this widget
+    \brief the layout direction for this widget.
+
+    \note This method no longer affects text layout direction since Qt 4.7.
 
     By default, this property is set to Qt::LeftToRight.
 
@@ -4693,7 +4704,6 @@ void QWidgetPrivate::resolveLayoutDirection()
     has been called for the parent do not inherit the parent's layout
     direction.
 
-    This method no longer affects text layout direction since Qt 4.7.
 
     \sa QApplication::layoutDirection
 */

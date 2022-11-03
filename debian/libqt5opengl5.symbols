@@ -1,6 +1,6 @@
 # SymbolsHelper-Confirmed: 5.15.1 amd64 i386
 libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
-| libqt5opengl5 #MINVER#, qtbase-abi-5-15-3
+| libqt5opengl5 #MINVER#, qtbase-abi-5-15-7
 * Build-Depends-Package: qtbase5-dev
  Qt_5.0@Qt_5.0 5.6.0~beta
  Qt_5.10@Qt_5.10 5.10.0
@@ -19,7 +19,7 @@ libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
  Qt_5.8@Qt_5.8 5.8.0
  Qt_5.9@Qt_5.9 5.9.0~beta
  Qt_5@Qt_5 5.6.0~beta
- Qt_5_PRIVATE_API@Qt_5_PRIVATE_API 5.6.0~beta 1
+ (symver)Qt_5_PRIVATE_API 0 1
  _Z19qt_qgl_paint_enginev@Qt_5 5.0.2
  _ZN10QGLContext10areSharingEPKS_S1_@Qt_5 5.0.2
  _ZN10QGLContext10currentCtxE@Qt_5 5.0.2
@@ -73,15 +73,6 @@ libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
  _ZN12QGLFunctionsC1Ev@Qt_5 5.0.2
  _ZN12QGLFunctionsC2EPK10QGLContext@Qt_5 5.0.2
  _ZN12QGLFunctionsC2Ev@Qt_5 5.0.2
- _ZN14QGLPaintDevice10beginPaintEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLPaintDevice18ensureActiveTargetEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLPaintDevice8endPaintEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLPaintDevice9getDeviceEP12QPaintDevice@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLPaintDeviceC1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLPaintDeviceC2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLPaintDeviceD0Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLPaintDeviceD1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLPaintDeviceD2Ev@Qt_5_PRIVATE_API 5.0.2 1
  _ZN14QGLPixelBuffer11bindTextureERK6QImagej@Qt_5 5.0.2
  _ZN14QGLPixelBuffer11bindTextureERK7QPixmapj@Qt_5 5.0.2
  _ZN14QGLPixelBuffer11bindTextureERK7QString@Qt_5 5.0.2
@@ -100,11 +91,6 @@ libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
  _ZN14QGLPixelBufferD0Ev@Qt_5 5.0.2
  _ZN14QGLPixelBufferD1Ev@Qt_5 5.0.2
  _ZN14QGLPixelBufferD2Ev@Qt_5 5.0.2
- _ZN14QGLSignalProxy11qt_metacallEN11QMetaObject4CallEiPPv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLSignalProxy11qt_metacastEPKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLSignalProxy16staticMetaObjectE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLSignalProxy21aboutToDestroyContextEPK10QGLContext@Qt_5_PRIVATE_API 5.0.2 1
- _ZN14QGLSignalProxy8instanceEv@Qt_5_PRIVATE_API 5.0.2 1
  _ZN16QGLShaderProgram11qt_metacallEN11QMetaObject4CallEiPPv@Qt_5 5.0.2
  _ZN16QGLShaderProgram11qt_metacastEPKc@Qt_5 5.0.2
  _ZN16QGLShaderProgram12removeShaderEP9QGLShader@Qt_5 5.0.2
@@ -252,51 +238,6 @@ libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
  _ZN16QGLShaderProgramD0Ev@Qt_5 5.0.2
  _ZN16QGLShaderProgramD1Ev@Qt_5 5.0.2
  _ZN16QGLShaderProgramD2Ev@Qt_5 5.0.2
- _ZN16QGLWidgetPrivate10renderCxPmEP7QPixmap@Qt_5_PRIVATE_API 5.0.2 1
- _ZN16QGLWidgetPrivate11initContextEP10QGLContextPK9QGLWidget@Qt_5_PRIVATE_API 5.0.2 1
- _ZN16QGLWidgetPrivate11makeCurrentEv@Qt_5_PRIVATE_API 5.12.2 1
- _ZN16QGLWidgetPrivate16cleanupColormapsEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN16QGLWidgetPrivate4initEP10QGLContextPK9QGLWidget@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx10drawPixmapERK6QRectFRK7QPixmapS2_@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx10penChangedEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx11drawTextureERK6QRectFjRK5QSizeS2_@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx12brushChangedEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx12drawTextItemERK7QPointFRK9QTextItem@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx12ensureActiveEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx13setTranslateZEf@Qt_5_PRIVATE_API 5.3.0 1
- _ZN17QGL2PaintEngineEx14opacityChangedEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx15invalidateStateEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx16transformChangedEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx17endNativePaintingEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx18brushOriginChangedEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx18clipEnabledChangedEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx18drawStaticTextItemEP15QStaticTextItem@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx18renderHintsChangedEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx19beginNativePaintingEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx19drawPixmapFragmentsEPKN8QPainter14PixmapFragmentEiRK7QPixmap6QFlagsINS0_18PixmapFragmentHintEE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx22compositionModeChangedEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx3endEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx4clipERK11QVectorPathN2Qt13ClipOperationE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx4fillERK11QVectorPathRK6QBrush@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx5beginEP12QPaintDevice@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx6strokeERK11QVectorPathRK4QPen@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx8setStateEP13QPainterState@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineEx9drawImageERK6QRectFRK6QImageS2_6QFlagsIN2Qt19ImageConversionFlagEE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineExC1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineExC2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineExD0Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineExD1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN17QGL2PaintEngineExD2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLCustomShaderStage11setInactiveEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLCustomShaderStage12setOnPainterEP8QPainter@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLCustomShaderStage16setUniformsDirtyEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLCustomShaderStage17removeFromPainterEP8QPainter@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLCustomShaderStage9setSourceERK10QByteArray@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLCustomShaderStageC1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLCustomShaderStageC2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLCustomShaderStageD0Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLCustomShaderStageD1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLCustomShaderStageD2Ev@Qt_5_PRIVATE_API 5.0.2 1
  _ZN20QGLFramebufferObject11bindDefaultEv@Qt_5 5.0.2
  _ZN20QGLFramebufferObject11drawTextureERK6QRectFjj@Qt_5 5.0.2
  _ZN20QGLFramebufferObject11drawTextureERK7QPointFjj@Qt_5 5.0.2
@@ -320,65 +261,6 @@ libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
  _ZN20QGLFramebufferObjectD0Ev@Qt_5 5.0.2
  _ZN20QGLFramebufferObjectD1Ev@Qt_5 5.0.2
  _ZN20QGLFramebufferObjectD2Ev@Qt_5 5.0.2
- _ZN20QGLTextureGlyphCache11fillTextureERKN18QTextureGlyphCache5CoordEj6QFixed@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLTextureGlyphCache17createTextureDataEii@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLTextureGlyphCache17resizeTextureDataEii@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLTextureGlyphCache5clearEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLTextureGlyphCacheC1EN11QFontEngine11GlyphFormatERK10QTransform@Qt_5_PRIVATE_API 5.3.0 1
- _ZN20QGLTextureGlyphCacheC2EN11QFontEngine11GlyphFormatERK10QTransform@Qt_5_PRIVATE_API 5.3.0 1
- _ZN20QGLTextureGlyphCacheD0Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLTextureGlyphCacheD1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QGLTextureGlyphCacheD2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffect11qt_metacallEN11QMetaObject4CallEiPPv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffect11qt_metacastEPKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffect11setUniformsEP16QGLShaderProgram@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffect16setUniformsDirtyEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffect16staticMetaObjectE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffect22setPixelShaderFragmentERK10QByteArray@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffect4drawEP8QPainter@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffectC1EP7QObject@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffectC2EP7QObject@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffectD0Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffectD1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN21QGraphicsShaderEffectD2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager11blitProgramEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager11qt_metacallEN11QMetaObject4CallEiPPv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager11qt_metacastEPKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager11setMaskTypeENS_8MaskTypeE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager13simpleProgramEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager14currentProgramEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager14setCustomStageEP20QGLCustomShaderStage@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager14setOpacityModeENS_11OpacityModeE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager14useBlitProgramEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager15setSrcPixelTypeEN2Qt10BrushStyleE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager15setSrcPixelTypeENS_12PixelSrcTypeE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager16staticMetaObjectE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager16useSimpleProgramEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager17removeCustomStageEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager18getUniformLocationENS_7UniformE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager18setCompositionModeEN8QPainter15CompositionModeE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager20useCorrectShaderProgEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager25optimiseForBrushTransformEN10QTransform18TransformationTypeE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManager8setDirtyEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManagerC1EP10QGLContext@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManagerC2EP10QGLContext@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManagerD0Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManagerD1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineShaderManagerD2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineSharedShaders15qShaderSnippetsE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineSharedShaders16staticMetaObjectE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineSharedShaders17shadersForContextEPK10QGLContext@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineSharedShaders18cleanupCustomStageEP20QGLCustomShaderStage@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineSharedShaders18findProgramInCacheERK19QGLEngineShaderProg@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineSharedShadersC1EPK10QGLContext@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineSharedShadersC2EPK10QGLContext@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineSharedShadersD1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLEngineSharedShadersD2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLWidgetGLPaintDevice10beginPaintEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLWidgetGLPaintDevice8endPaintEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLWidgetGLPaintDevice9setWidgetEP9QGLWidget@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLWidgetGLPaintDeviceC1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN22QGLWidgetGLPaintDeviceC2Ev@Qt_5_PRIVATE_API 5.0.2 1
  _ZN26QGLFramebufferObjectFormat10setSamplesEi@Qt_5 5.0.2
  _ZN26QGLFramebufferObjectFormat13setAttachmentEN20QGLFramebufferObject10AttachmentE@Qt_5 5.0.2
  _ZN26QGLFramebufferObjectFormat16setTextureTargetEj@Qt_5 5.0.2
@@ -508,11 +390,9 @@ libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
  _ZN9QGLWidget9setFormatERK9QGLFormat@Qt_5 5.0.2
  _ZN9QGLWidgetC1EP10QGLContextP7QWidgetPKS_6QFlagsIN2Qt10WindowTypeEE@Qt_5 5.0.2
  _ZN9QGLWidgetC1EP7QWidgetPKS_6QFlagsIN2Qt10WindowTypeEE@Qt_5 5.0.2
- _ZN9QGLWidgetC1ER16QGLWidgetPrivateRK9QGLFormatP7QWidgetPKS_6QFlagsIN2Qt10WindowTypeEE@Qt_5_PRIVATE_API 5.0.2 1
  _ZN9QGLWidgetC1ERK9QGLFormatP7QWidgetPKS_6QFlagsIN2Qt10WindowTypeEE@Qt_5 5.0.2
  _ZN9QGLWidgetC2EP10QGLContextP7QWidgetPKS_6QFlagsIN2Qt10WindowTypeEE@Qt_5 5.0.2
  _ZN9QGLWidgetC2EP7QWidgetPKS_6QFlagsIN2Qt10WindowTypeEE@Qt_5 5.0.2
- _ZN9QGLWidgetC2ER16QGLWidgetPrivateRK9QGLFormatP7QWidgetPKS_6QFlagsIN2Qt10WindowTypeEE@Qt_5_PRIVATE_API 5.0.2 1
  _ZN9QGLWidgetC2ERK9QGLFormatP7QWidgetPKS_6QFlagsIN2Qt10WindowTypeEE@Qt_5 5.0.2
  _ZN9QGLWidgetD0Ev@Qt_5 5.0.2
  _ZN9QGLWidgetD1Ev@Qt_5 5.0.2
@@ -539,10 +419,6 @@ libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
  _ZNK11QGLColormap8entryRgbEi@Qt_5 5.0.2
  _ZNK12QGLFunctions14openGLFeaturesEv@Qt_5 5.0.2
  _ZNK12QGLFunctions16hasOpenGLFeatureENS_13OpenGLFeatureE@Qt_5 5.0.2
- _ZNK14QGLPaintDevice14alphaRequestedEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK14QGLPaintDevice6formatEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK14QGLPaintDevice6metricEN12QPaintDevice17PaintDeviceMetricE@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK14QGLPaintDevice9isFlippedEv@Qt_5_PRIVATE_API 5.0.2 1
  _ZNK14QGLPixelBuffer11paintEngineEv@Qt_5 5.0.2
  _ZNK14QGLPixelBuffer20updateDynamicTextureEj@Qt_5 5.0.2
  _ZNK14QGLPixelBuffer22generateDynamicTextureEv@Qt_5 5.0.2
@@ -553,7 +429,6 @@ libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
  _ZNK14QGLPixelBuffer7contextEv@Qt_5 5.0.2
  _ZNK14QGLPixelBuffer7isValidEv@Qt_5 5.0.2
  _ZNK14QGLPixelBuffer7toImageEv@Qt_5 5.0.2
- _ZNK14QGLSignalProxy10metaObjectEv@Qt_5_PRIVATE_API 5.0.2 1
  _ZNK16QGLShaderProgram10metaObjectEv@Qt_5 5.0.2
  _ZNK16QGLShaderProgram15uniformLocationEPKc@Qt_5 5.0.2
  _ZNK16QGLShaderProgram15uniformLocationERK10QByteArray@Qt_5 5.0.2
@@ -569,10 +444,6 @@ libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
  _ZNK16QGLShaderProgram7shadersEv@Qt_5 5.0.2
  _ZNK16QGLShaderProgram8isLinkedEv@Qt_5 5.0.2
  _ZNK16QGLShaderProgram9programIdEv@Qt_5 5.0.2
- _ZNK17QGL2PaintEngineEx11createStateEP13QPainterState@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK17QGL2PaintEngineEx22isNativePaintingActiveEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK17QGL2PaintEngineEx22shouldDrawCachedGlyphsEP11QFontEngineRK10QTransform@Qt_5_PRIVATE_API 5.1.0 1
- _ZNK20QGLCustomShaderStage6sourceEv@Qt_5_PRIVATE_API 5.0.2 1
  _ZNK20QGLFramebufferObject10attachmentEv@Qt_5 5.0.2
  _ZNK20QGLFramebufferObject11paintEngineEv@Qt_5 5.0.2
  _ZNK20QGLFramebufferObject4sizeEv@Qt_5 5.0.2
@@ -583,15 +454,6 @@ libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
  _ZNK20QGLFramebufferObject7isValidEv@Qt_5 5.0.2
  _ZNK20QGLFramebufferObject7textureEv@Qt_5 5.0.2
  _ZNK20QGLFramebufferObject7toImageEv@Qt_5 5.0.2
- _ZNK20QGLTextureGlyphCache12glyphPaddingEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK20QGLTextureGlyphCache15maxTextureWidthEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK20QGLTextureGlyphCache16maxTextureHeightEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK21QGraphicsShaderEffect10metaObjectEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK21QGraphicsShaderEffect19pixelShaderFragmentEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK22QGLEngineShaderManager10metaObjectEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK22QGLWidgetGLPaintDevice11paintEngineEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK22QGLWidgetGLPaintDevice4sizeEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK22QGLWidgetGLPaintDevice7contextEv@Qt_5_PRIVATE_API 5.0.2 1
  _ZNK26QGLFramebufferObjectFormat10attachmentEv@Qt_5 5.0.2
  _ZNK26QGLFramebufferObjectFormat13textureTargetEv@Qt_5 5.0.2
  _ZNK26QGLFramebufferObjectFormat21internalTextureFormatEv@Qt_5 5.0.2
@@ -637,56 +499,29 @@ libQt5OpenGL.so.5 libqt5opengl5 #MINVER#
  _ZNK9QGLWidget8qglColorERK6QColor@Qt_5 5.0.2
  _ZNK9QGLWidget9isSharingEv@Qt_5 5.0.2
  _ZTI10QGLContext@Qt_5 5.0.2
- _ZTI14QGLPaintDevice@Qt_5_PRIVATE_API 5.0.2 1
  _ZTI14QGLPixelBuffer@Qt_5 5.0.2
- _ZTI14QGLSignalProxy@Qt_5_PRIVATE_API 5.0.2 1
  _ZTI16QGLShaderProgram@Qt_5 5.0.2
- _ZTI16QGLWidgetPrivate@Qt_5_PRIVATE_API 5.0.2 1
  _ZTI16QOpenGLFunctions@Qt_5 5.6.0~beta
- _ZTI17QGL2PaintEngineEx@Qt_5_PRIVATE_API 5.0.2 1
  _ZTI17QOpenGLExtensions@Qt_5 5.4.0
- _ZTI20QGLCustomShaderStage@Qt_5_PRIVATE_API 5.0.2 1
  _ZTI20QGLFramebufferObject@Qt_5 5.0.2
- _ZTI20QGLTextureGlyphCache@Qt_5_PRIVATE_API 5.0.2 1
- _ZTI21QGraphicsShaderEffect@Qt_5_PRIVATE_API 5.0.2 1
  _ZTI21QOpenGLExtraFunctions@Qt_5 5.6.0~beta
  _ZTI21QOpenGLSharedResource@Qt_5 5.0.2
- _ZTI22QGLEngineShaderManager@Qt_5_PRIVATE_API 5.0.2 1
- _ZTI22QGLWidgetGLPaintDevice@Qt_5_PRIVATE_API 5.0.2 1
  _ZTI9QGLShader@Qt_5 5.0.2
  _ZTI9QGLWidget@Qt_5 5.0.2
  _ZTS10QGLContext@Qt_5 5.0.2
- _ZTS14QGLPaintDevice@Qt_5_PRIVATE_API 5.0.2 1
  _ZTS14QGLPixelBuffer@Qt_5 5.0.2
- _ZTS14QGLSignalProxy@Qt_5_PRIVATE_API 5.0.2 1
  _ZTS16QGLShaderProgram@Qt_5 5.0.2
- _ZTS16QGLWidgetPrivate@Qt_5_PRIVATE_API 5.0.2 1
  _ZTS16QOpenGLFunctions@Qt_5 5.6.0~beta
- _ZTS17QGL2PaintEngineEx@Qt_5_PRIVATE_API 5.0.2 1
  _ZTS17QOpenGLExtensions@Qt_5 5.4.0
- _ZTS20QGLCustomShaderStage@Qt_5_PRIVATE_API 5.0.2 1
  _ZTS20QGLFramebufferObject@Qt_5 5.0.2
- _ZTS20QGLTextureGlyphCache@Qt_5_PRIVATE_API 5.0.2 1
- _ZTS21QGraphicsShaderEffect@Qt_5_PRIVATE_API 5.0.2 1
  _ZTS21QOpenGLExtraFunctions@Qt_5 5.6.0~beta
  _ZTS21QOpenGLSharedResource@Qt_5 5.0.2
- _ZTS22QGLEngineShaderManager@Qt_5_PRIVATE_API 5.0.2 1
- _ZTS22QGLWidgetGLPaintDevice@Qt_5_PRIVATE_API 5.0.2 1
  _ZTS9QGLShader@Qt_5 5.0.2
  _ZTS9QGLWidget@Qt_5 5.0.2
  _ZTV10QGLContext@Qt_5 5.0.2
- _ZTV14QGLPaintDevice@Qt_5_PRIVATE_API 5.0.2 1
  _ZTV14QGLPixelBuffer@Qt_5 5.0.2
- _ZTV14QGLSignalProxy@Qt_5_PRIVATE_API 5.0.2 1
  _ZTV16QGLShaderProgram@Qt_5 5.0.2
- _ZTV16QGLWidgetPrivate@Qt_5_PRIVATE_API 5.0.2 1
- _ZTV17QGL2PaintEngineEx@Qt_5_PRIVATE_API 5.0.2 1
- _ZTV20QGLCustomShaderStage@Qt_5_PRIVATE_API 5.0.2 1
  _ZTV20QGLFramebufferObject@Qt_5 5.0.2
- _ZTV20QGLTextureGlyphCache@Qt_5_PRIVATE_API 5.0.2 1
- _ZTV21QGraphicsShaderEffect@Qt_5_PRIVATE_API 5.0.2 1
- _ZTV22QGLEngineShaderManager@Qt_5_PRIVATE_API 5.0.2 1
- _ZTV22QGLWidgetGLPaintDevice@Qt_5_PRIVATE_API 5.0.2 1
  _ZTV9QGLShader@Qt_5 5.0.2
  _ZTV9QGLWidget@Qt_5 5.0.2
  _ZeqRK9QGLFormatS1_@Qt_5 5.0.2

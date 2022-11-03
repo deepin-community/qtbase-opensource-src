@@ -1,13 +1,8 @@
 # Backported from upstream.
-gcc_11_limits.diff
 mime_globs.diff
 fusion_checkable_qpushbutton.diff
-mysql_remove_version_checks.diff
-full_width_selection_rtl.diff
-xcb_add_a_timeout_control_when_reading_INCR_property.diff
 fix_recursion_crash.diff
 mysql_field_readonly.diff
-CVE-2021-38593.diff
 openssl3.diff
 CVE-2022-25255.diff
 
@@ -33,7 +28,6 @@ fix_action_distance_lineedit.patch
 add-sunway-support.patch
 QTBUG-85978-85985-QLineEdit-Fix-the-problem-under-the-touch-screen.patch
 QTBUG-85088-QGraphicsView-show-error-after-lose-focus.patch
-QTBUG-86846-Fixed-the-password-box-not-refreshed-under-Chinese-input-method.patch
 fix-combobox-cant-popup-on-mouse-release.patch
 remove-the-X11-True-and-False.patch
 feat-touch-screen-QListView-sliding-acceleration.patch
@@ -44,11 +38,9 @@ QTBUG-92468-fix-qtextedit-cursor-drawn-incorrectly.patch
 QTBUG-92460-don-use-large-icons-in-qlineedit.patch
 QTBUG-92366-Check-scrollbar-visibility-when-computing-QListView-Margins.patch
 QTBUG-92583-fix-pagedown-behavior-and-pageup.patch
-QTBUG-93742-fix-misplacement-of-placeholder-text-in-QLineEdit-with-RTL-content.patch
 QTBUG-94248-Check-scrollbar-ScrollBarOverlap-when-computing-QListView-margins.patch
 QTBUG-94538-fix-cursorTheme-update-issue.patch
 fix-QLineEdit-cursor-jumping-on-touch-screen.patch
-QTBUG-94824-fix-placement-of-placeholder-text-in-QLineEdits-with-action-icons.patch
 QTBUG-95011-do-not-change-layout-direction-on-keyboard-input.patch
 QTBUG-95607-Close-all-popup-windows-when-the-screen-is-rotated.patch
 QTBUG-95341-Account-for-the-placeholderText-when-computing-lineRect.patch
@@ -61,7 +53,6 @@ QTBUG-98099-QFontComboBox-do-not-response-qApp-fontDatabaseChanged.patch
 QTBUG-98961-Fix-item-view-auto-scrolling-during-dragdrop.patch
 QTBUG-99163-Use-qint64-to-replace-int-while-qt_transform_image_rasterize.patch
 QTBUG-98247-Test-result-of-qobject_cast-before-dereferencing.patch
-QTBUG-91223-Avoid-int-overflow-in-QImage-rotate90-180-270.patch
 QTBUG-99512-Always-update-pressedPosition-when-drag-was-enabled.patch
 auto-select-opengl-or-opengles.patch
 QTBUG-81696-QHighDpi-revert-window-on-multiple-screens-handling.patch

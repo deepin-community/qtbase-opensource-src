@@ -1,6 +1,6 @@
 # SymbolsHelper-Confirmed: 5.15.3 amd64
 libQt5Test.so.5 libqt5test5 #MINVER#
-| libqt5test5 #MINVER#, qtbase-abi-5-15-3
+| libqt5test5 #MINVER#, qtbase-abi-5-15-7
 * Build-Depends-Package: qtbase5-dev
  Qt_5.0@Qt_5.0 5.6.0~beta
  Qt_5.10@Qt_5.10 5.10.0
@@ -19,48 +19,7 @@ libQt5Test.so.5 libqt5test5 #MINVER#
  Qt_5.8@Qt_5.8 5.8.0
  Qt_5.9@Qt_5.9 5.9.0~beta
  Qt_5@Qt_5 5.6.0~beta
- Qt_5_PRIVATE_API@Qt_5_PRIVATE_API 5.6.0~beta 1
- _ZN10QTestTable15globalTestTableEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN10QTestTable16currentTestTableEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN10QTestTable20clearGlobalTestTableEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN10QTestTable7newDataEPKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZN10QTestTable9addColumnEiPKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZN10QTestTableC1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN10QTestTableC2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN10QTestTableD1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN10QTestTableD2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult10addFailureEPKcS1_i@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult10expectFailEPKcS1_N5QTest12TestFailModeES1_i@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult14currentAppNameEv@Qt_5_PRIVATE_API 5.2.0~beta1 1
- _ZN11QTestResult14currentDataTagEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult15currentTestDataEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult15skipCurrentTestEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult17currentTestFailedEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult17setCurrentAppNameEPKc@Qt_5_PRIVATE_API 5.2.0~beta1 1
- _ZN11QTestResult18setCurrentTestDataEP9QTestData@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult18setSkipCurrentTestEb@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult19currentTestFunctionEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult20currentGlobalDataTagEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult20setCurrentTestObjectEPKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult21currentGlobalTestDataEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult21currentTestObjectNameEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult22setCurrentTestFunctionEPKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult23finishedCurrentTestDataEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult23setBlacklistCurrentTestEb@Qt_5_PRIVATE_API 5.4.0 1
- _ZN11QTestResult24setCurrentGlobalTestDataEP9QTestData@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult27finishedCurrentTestFunctionEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult30finishedCurrentTestDataCleanupEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult5resetEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult6verifyEbPKcS1_S1_i@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult7addSkipEPKcS1_i@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult7compareEbPKc11QStringViewRK13QLatin1StringS1_S1_S1_i@Qt_5_PRIVATE_API 5.14.1 1
- _ZN11QTestResult7compareEbPKc11QStringViewS2_S1_S1_S1_i@Qt_5_PRIVATE_API 5.14.1 1
- _ZN11QTestResult7compareEbPKcPcS2_S1_S1_S1_i@Qt_5_PRIVATE_API 5.0.2 1
- _ZN11QTestResult7compareEbPKcRK13QLatin1String11QStringViewS1_S1_S1_i@Qt_5_PRIVATE_API 5.14.1 1
- _ZN11QTestResult7compareEbPKcddS1_S1_S1_i@Qt_5_PRIVATE_API 5.14.1 1
- _ZN11QTestResult7compareEbPKcffS1_S1_S1_i@Qt_5_PRIVATE_API 5.14.1 1
- _ZN11QTestResult7compareEbPKciiS1_S1_S1_i@Qt_5_PRIVATE_API 5.14.1 1
- _ZN11QTestResult7compareEbPKcjjS1_S1_S1_i@Qt_5_PRIVATE_API 5.14.1 1
+ (symver)Qt_5_PRIVATE_API 0 1
  _ZN12QTestPrivate14parseBlackListEv@Qt_5 5.6.0~beta
  _ZN12QTestPrivate15checkBlackListsEPKcS1_@Qt_5 5.6.0~beta
  _ZN12QTestPrivate17qtestMouseButtonsE@Qt_5 5.11.0~rc1
@@ -68,23 +27,6 @@ libQt5Test.so.5 libqt5test5 #MINVER#
  _ZN14QTestEventLoop11qt_metacallEN11QMetaObject4CallEiPPv@Qt_5 5.0.2
  _ZN14QTestEventLoop11qt_metacastEPKc@Qt_5 5.0.2
  _ZN14QTestEventLoop16staticMetaObjectE@Qt_5 5.0.2
- _ZN19QAbstractTestLogger10addMessageE9QtMsgTypeRK18QMessageLogContextRK7QString@Qt_5_PRIVATE_API 5.15.3
- _ZN19QAbstractTestLogger11stopLoggingEv@Qt_5_PRIVATE_API 5.15.3
- _ZN19QAbstractTestLogger12outputStringEPKc@Qt_5_PRIVATE_API 5.15.3
- _ZN19QAbstractTestLogger12startLoggingEv@Qt_5_PRIVATE_API 5.15.3
- _ZN19QAbstractTestLoggerC1EPKc@Qt_5_PRIVATE_API 5.15.3
- _ZN19QAbstractTestLoggerC2EPKc@Qt_5_PRIVATE_API 5.15.3
- _ZN19QAbstractTestLoggerD0Ev@Qt_5_PRIVATE_API 5.15.3
- _ZN19QAbstractTestLoggerD1Ev@Qt_5_PRIVATE_API 5.15.3
- _ZN19QAbstractTestLoggerD2Ev@Qt_5_PRIVATE_API 5.15.3
- _ZN20QBenchmarkGlobalData14createMeasurerEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QBenchmarkGlobalData26adjustMedianIterationCountEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QBenchmarkGlobalData7currentE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QBenchmarkGlobalData7setModeENS_4ModeE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QBenchmarkGlobalDataC1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QBenchmarkGlobalDataC2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QBenchmarkGlobalDataD1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN20QBenchmarkGlobalDataD2Ev@Qt_5_PRIVATE_API 5.0.2 1
  _ZN24QAbstractItemModelTester11qt_metacallEN11QMetaObject4CallEiPPv@Qt_5 5.11.0~rc1
  _ZN24QAbstractItemModelTester11qt_metacastEPKc@Qt_5 5.11.0~rc1
  _ZN24QAbstractItemModelTester16staticMetaObjectE@Qt_5 5.11.0~rc1
@@ -93,15 +35,6 @@ libQt5Test.so.5 libqt5test5 #MINVER#
  _ZN24QAbstractItemModelTesterC1EP18QAbstractItemModelP7QObject@Qt_5 5.11.0~rc1
  _ZN24QAbstractItemModelTesterC2EP18QAbstractItemModelNS_20FailureReportingModeEP7QObject@Qt_5 5.11.0~rc1
  _ZN24QAbstractItemModelTesterC2EP18QAbstractItemModelP7QObject@Qt_5 5.11.0~rc1
- _ZN24QBenchmarkTestMethodData10endDataRunEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN24QBenchmarkTestMethodData12beginDataRunEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN24QBenchmarkTestMethodData20adjustIterationCountEi@Qt_5_PRIVATE_API 5.0.2 1
- _ZN24QBenchmarkTestMethodData7currentE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN24QBenchmarkTestMethodData9setResultEdN5QTest16QBenchmarkMetricEb@Qt_5_PRIVATE_API 5.2.0 1
- _ZN24QBenchmarkTestMethodDataC1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN24QBenchmarkTestMethodDataC2Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN24QBenchmarkTestMethodDataD1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN24QBenchmarkTestMethodDataD2Ev@Qt_5_PRIVATE_API 5.0.2 1
  _ZN5QTest10asciiToKeyEc@Qt_5 5.0.2
  _ZN5QTest10keyToAsciiEN2Qt3KeyE@Qt_5 5.0.2
  _ZN5QTest10testObjectEv@Qt_5 5.0.2
@@ -169,6 +102,7 @@ libQt5Test.so.5 libqt5test5 #MINVER#
  _ZN5QTest8testTagsE@Qt_5 5.0.2
  _ZN5QTest8toStringEPKc@Qt_5 5.0.2
  _ZN5QTest8toStringEPKv@Qt_5 5.0.2
+ _ZN5QTest8toStringEPVKv@Qt_5 5.15.5
  (optional=templinst)_ZN5QTest8toStringI8qfloat16EEPcRKT_@Qt_5 5.14.1
  (optional=templinst)_ZN5QTest8toStringIaEEPcRKT_@Qt_5 5.6.0~beta
  (optional=templinst)_ZN5QTest8toStringIbEEPcRKT_@Qt_5 5.0.2
@@ -184,63 +118,10 @@ libQt5Test.so.5 libqt5test5 #MINVER#
  (optional=templinst)_ZN5QTest8toStringItEEPcRKT_@Qt_5 5.0.2
  (optional=templinst)_ZN5QTest8toStringIxEEPcRKT_@Qt_5 5.0.2
  (optional=templinst)_ZN5QTest8toStringIyEEPcRKT_@Qt_5 5.0.2
- _ZN8QTestLog10totalCountEv@Qt_5_PRIVATE_API 5.12.2 1
- _ZN8QTestLog11loggerCountEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog11stopLoggingEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog12startLoggingEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog12verboseLevelEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog13enterTestDataEP9QTestData@Qt_5_PRIVATE_API 5.12.2 1
- _ZN8QTestLog13ignoreMessageE9QtMsgTypePKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog13ignoreMessageE9QtMsgTypeRK18QRegularExpression@Qt_5_PRIVATE_API 5.3.0 1
- _ZN8QTestLog13resetCountersEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog14blacklistCountEv@Qt_5_PRIVATE_API 5.4.0 1
- _ZN8QTestLog14nsecsTotalTimeEv@Qt_5_PRIVATE_API 5.6.0~beta 1
- _ZN8QTestLog14setMaxWarningsEi@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog15setVerboseLevelEi@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog16staticMetaObjectE@Qt_5_PRIVATE_API 5.15.1 1
- _ZN8QTestLog17enterTestFunctionEPKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog17leaveTestFunctionEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog17loggerUsingStdoutEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog17nsecsFunctionTimeEv@Qt_5_PRIVATE_API 5.6.0~beta 1
- _ZN8QTestLog18addBenchmarkResultERK16QBenchmarkResult@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog18printAvailableTagsE@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog19clearIgnoreMessagesEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog21installedTestCoverageEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog23unhandledIgnoreMessagesEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog24setInstalledTestCoverageEb@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog25setPrintAvailableTagsModeEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog28printUnhandledIgnoreMessagesEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog4infoEPKcS1_i@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog4warnEPKcS1_i@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog7addFailEPKcS1_i@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog7addPassEPKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog7addSkipEPKcS1_i@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog8addBFailEPKcS1_i@Qt_5_PRIVATE_API 5.4.0 1
- _ZN8QTestLog8addBPassEPKc@Qt_5_PRIVATE_API 5.4.0 1
- _ZN8QTestLog8addXFailEPKcS1_i@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog8addXPassEPKcS1_i@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog9addBXFailEPKcS1_i@Qt_5_PRIVATE_API 5.12.2 1
- _ZN8QTestLog9addBXPassEPKcS1_i@Qt_5_PRIVATE_API 5.12.2 1
- _ZN8QTestLog9addLoggerENS_7LogModeEPKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog9addLoggerEP19QAbstractTestLogger@Qt_5_PRIVATE_API 5.15.3
- _ZN8QTestLog9failCountEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog9passCountEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZN8QTestLog9skipCountEv@Qt_5_PRIVATE_API 5.0.2 1
  _ZN9QTestData6appendEiPKv@Qt_5 5.0.2
- _ZN9QTestDataC1EPKcP10QTestTable@Qt_5_PRIVATE_API 5.0.2 1
- _ZN9QTestDataC2EPKcP10QTestTable@Qt_5_PRIVATE_API 5.0.2 1
  _ZN9QTestDataD1Ev@Qt_5 5.0.2
  _ZN9QTestDataD2Ev@Qt_5 5.0.2
- _ZNK10QTestTable12elementCountEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK10QTestTable13elementTypeIdEi@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK10QTestTable7dataTagEi@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK10QTestTable7indexOfEPKc@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK10QTestTable7isEmptyEv@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK10QTestTable8testDataEi@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK10QTestTable9dataCountEv@Qt_5_PRIVATE_API 5.0.2 1
  _ZNK14QTestEventLoop10metaObjectEv@Qt_5 5.0.2
- _ZNK19QAbstractTestLogger17filterUnprintableEPc@Qt_5_PRIVATE_API 5.15.3
- _ZNK19QAbstractTestLogger17isLoggingToStdoutEv@Qt_5_PRIVATE_API 5.15.3
  _ZNK24QAbstractItemModelTester10metaObjectEv@Qt_5 5.11.0~rc1
  _ZNK24QAbstractItemModelTester20failureReportingModeEv@Qt_5 5.11.0~rc1
  _ZNK24QAbstractItemModelTester5modelEv@Qt_5 5.11.0~rc1
@@ -250,14 +131,11 @@ libQt5Test.so.5 libqt5test5 #MINVER#
  _ZNK9QTestData9dataCountEv@Qt_5 5.0.2
  (optional=templinst)_ZNSt6vectorI11QMetaMethodSaIS0_EE17_M_realloc_insertIJRKS0_EEEvN9__gnu_cxx17__normal_iteratorIPS0_S2_EEDpOT_@Qt_5 5.9.1
  (optional=templinst)_ZNSt6vectorIP9QTestDataSaIS1_EE17_M_realloc_insertIJRKS1_EEEvN9__gnu_cxx17__normal_iteratorIPS1_S3_EEDpOT_@Qt_5 5.9.1
- (optional=templinst)_ZNSt8_Rb_treeI10QByteArrayS0_St9_IdentityIS0_ESt4lessIS0_ESaIS0_EE16_M_insert_uniqueIRKS0_EESt4pairISt17_Rb_tree_iteratorIS0_EbEOT_@Qt_5 5.4.0
+ (optional=templinst|arch=amd64 arm64 hppa i386 ia64 mips64el ppc64el riscv64 sh4 sparc64 x32)_ZNSt8_Rb_treeI10QByteArrayS0_St9_IdentityIS0_ESt4lessIS0_ESaIS0_EE16_M_insert_uniqueIRKS0_EESt4pairISt17_Rb_tree_iteratorIS0_EbEOT_@Qt_5 5.4.0
  (optional=templinst)_ZNSt8_Rb_treeI10QByteArrayS0_St9_IdentityIS0_ESt4lessIS0_ESaIS0_EE4findERKS0_@Qt_5 5.4.0
  _ZTI14QTestEventLoop@Qt_5 5.0.2
- _ZTI19QAbstractTestLogger@Qt_5_PRIVATE_API 5.15.3
  _ZTI24QAbstractItemModelTester@Qt_5 5.11.0~rc1
  _ZTS14QTestEventLoop@Qt_5 5.0.2
- _ZTS19QAbstractTestLogger@Qt_5_PRIVATE_API 5.15.3
  _ZTS24QAbstractItemModelTester@Qt_5 5.11.0~rc1
  _ZTV14QTestEventLoop@Qt_5 5.0.2
- _ZTV19QAbstractTestLogger@Qt_5_PRIVATE_API 5.15.3
  _ZTV24QAbstractItemModelTester@Qt_5 5.11.0~rc1

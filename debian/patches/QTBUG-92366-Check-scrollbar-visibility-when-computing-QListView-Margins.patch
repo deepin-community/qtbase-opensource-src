@@ -8,7 +8,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qlistview.cpp
 ===================================================================
 --- qtbase-opensource-src.orig/src/widgets/itemviews/qlistview.cpp
 +++ qtbase-opensource-src/src/widgets/itemviews/qlistview.cpp
-@@ -1787,7 +1787,7 @@ void QListViewPrivate::prepareItemsLayou
+@@ -1820,7 +1820,7 @@ void QListViewPrivate::prepareItemsLayou
      // maximumViewportSize() already takes scrollbar into account if policy is
      // Qt::ScrollBarAlwaysOn but scrollbar extent must be deduced if policy
      // is Qt::ScrollBarAsNeeded
@@ -21,15 +21,15 @@ Index: qtbase-opensource-src/tests/auto/widgets/itemviews/qlistview/tst_qlistvie
 ===================================================================
 --- qtbase-opensource-src.orig/tests/auto/widgets/itemviews/qlistview/tst_qlistview.cpp
 +++ qtbase-opensource-src/tests/auto/widgets/itemviews/qlistview/tst_qlistview.cpp
-@@ -169,6 +169,7 @@ private slots:
+@@ -171,6 +171,7 @@ private slots:
      void itemAlignment();
      void internalDragDropMove_data();
      void internalDragDropMove();
 +    void spacingWithWordWrap();
+     void scrollOnRemove_data();
+     void scrollOnRemove();
  };
- 
- // Testing get/set functions
-@@ -2716,6 +2717,59 @@ void tst_QListView::internalDragDropMove
+@@ -2795,6 +2796,59 @@ void tst_QListView::internalDragDropMove
      }
  }
  
@@ -86,6 +86,6 @@ Index: qtbase-opensource-src/tests/auto/widgets/itemviews/qlistview/tst_qlistvie
 +        QCOMPARE(rectForRowOne.y() + rectForRowOne.height(), rectForRowTwo.y());
 +    }
 +}
-
- QTEST_MAIN(tst_QListView)
- #include "tst_qlistview.moc"
+ 
+ void tst_QListView::scrollOnRemove_data()
+ {

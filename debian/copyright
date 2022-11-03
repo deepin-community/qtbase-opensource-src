@@ -13,6 +13,7 @@ Files-Excluded: bin/licheck*
                 tests/auto/network/access/qnetworkreply/bigfile
                 tests/auto/network/access/qnetworkreply/resource
                 tests/auto/network/access/qnetworkreply/rfc3252.txt
+                tests/benchmarks/widgets/graphicsview/qgraphicsview/benchapps/chipTest/chip.debug
                 tests/manual/network_stresstest/qtest
                 tests/testserver/apache2/testdata/www/htdocs/protected/rfc3252.txt
                 tests/testserver/apache2/testdata/www/htdocs/rfcs/rfc2616.html
@@ -27,7 +28,7 @@ Files-Excluded: bin/licheck*
 # Manual rules for The Qt Company copyrights
 
 Files: *
-Copyright: 2016-2020 The Qt Company Ltd.
+Copyright: 2016-2021 The Qt Company Ltd.
 License: LGPL-3 or GPL-2
 
 Files: *.qdoc
@@ -66,7 +67,7 @@ Copyright: 2007-2013 Fathi Boudra <fabo@debian.org>
            2005-2007 Brian Nelson <pyro@debian.org>
            2012-2013 Zoltán Balogh <zoltan.balogh@canonical.com>
            2012-2013 Timo Jyrinki <timo.jyrinki@canonical.com>
-           2013-2020 Dmitry Shachnev <mitya57@debian.org>
+           2013-2022 Dmitry Shachnev <mitya57@debian.org>
            2018 Simon Quigley <tsimonq2@ubuntu.com>
 License: LGPL-3 or GPL-2+
 
@@ -495,7 +496,7 @@ Files: configure
        tests/benchmarks/corelib/text/qbytearray/main.cpp
        tests/benchmarks/corelib/tools/qhash/main.cpp
 Copyright: 2016-2020 Intel Corporation
-           2016-2020 The Qt Company Ltd.
+           2016-2021 The Qt Company Ltd.
 License: GPL-3 with Qt-1.0 exception
 
 Files: tests/auto/corelib/global/qglobalstatic/tst_qglobalstatic.cpp
@@ -882,7 +883,6 @@ Copyright: 2014 BlackBerry Limited (formerly Research In Motion)
 License: LGPL-3 or GPL-2
 
 Files: src/android/jar/src/org/qtproject/qt5/android/EditContextView.java
-       src/android/jar/src/org/qtproject/qt5/android/ExtractStyle.java
        src/android/jar/src/org/qtproject/qt5/android/QtMessageDialogHelper.java
        src/android/jar/src/org/qtproject/qt5/android/QtThread.java
        src/plugins/platforms/android/androidjniclipboard.cpp
@@ -892,7 +892,6 @@ Files: src/android/jar/src/org/qtproject/qt5/android/EditContextView.java
        src/plugins/platforms/android/androidjnimenu.h
        src/plugins/platforms/android/androidplatformplugin.cpp
        src/plugins/platforms/android/androidsurfaceclient.h
-       src/plugins/platforms/android/extract.cpp
        src/plugins/platforms/android/main.cpp
        src/plugins/platforms/android/qandroidassetsfileenginehandler.cpp
        src/plugins/platforms/android/qandroidassetsfileenginehandler.h
@@ -934,7 +933,8 @@ Copyright: 2012-2017 BogDan Vatra <bogdan@kde.org>
            2016 The Qt Company Ltd.
 License: LGPL-3 or GPL-2
 
-Files: src/android/jar/src/org/qtproject/qt5/android/QtEditText.java
+Files: src/android/jar/src/org/qtproject/qt5/android/ExtractStyle.java
+       src/android/jar/src/org/qtproject/qt5/android/QtEditText.java
        src/android/jar/src/org/qtproject/qt5/android/QtInputConnection.java
        src/android/jar/src/org/qtproject/qt5/android/QtLayout.java
        src/android/jar/src/org/qtproject/qt5/android/QtNative.java
@@ -943,6 +943,7 @@ Files: src/android/jar/src/org/qtproject/qt5/android/QtEditText.java
        src/android/jar/src/org/qtproject/qt5/android/QtSurface.java
        src/plugins/platforms/android/androidjnimain.cpp
        src/plugins/platforms/android/androidjnimain.h
+       src/plugins/platforms/android/extract.cpp
        src/plugins/platforms/android/qandroidplatformbackingstore.cpp
        src/plugins/platforms/android/qandroidplatformbackingstore.h
        src/plugins/platforms/android/qandroidplatformdialoghelpers.cpp
@@ -955,7 +956,7 @@ Files: src/android/jar/src/org/qtproject/qt5/android/QtEditText.java
        src/plugins/platforms/android/qandroidplatformwindow.cpp
        src/plugins/platforms/android/qandroidplatformwindow.h
 Copyright: 2012-2016 BogDan Vatra <bogdan@kde.org>
-           2016-2018 The Qt Company Ltd.
+           2016-2021 The Qt Company Ltd.
 License: LGPL-3 or GPL-2
 
 Files: src/testlib/qteamcitylogger.cpp
@@ -1976,7 +1977,7 @@ Files: src/corelib/text/qlocale_data_p.h
        tests/auto/corelib/text/qchar/data/NormalizationTest.txt
        tests/auto/corelib/text/qtextboundaryfinder/data/*.txt
        util/unicode/data/*.txt
-Copyright: 1991-2017 Unicode, Inc.
+Copyright: 1991-2020 Unicode, Inc.
 License: Unicode
  Permission is hereby granted, free of charge, to any person obtaining a
  copy of the Unicode data files and any associated documentation (the "Data
@@ -2104,18 +2105,20 @@ License: Harfbuzz
  PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS, OR MODIFICATIONS.
 
 Files: src/3rdparty/freetype/*
-Copyright: 1996-2019 David Turner, Robert Wilhelm, and Werner Lemberg
-           1996-2019 Just van Rossum
-           2002-2019 Roberto Alameda
+Copyright: 1996-2020 David Turner, Robert Wilhelm, and Werner Lemberg
+           1996-2020 Just van Rossum
+           2002-2020 Roberto Alameda
            2003 Huw D M Davies for Codeweavers
-           2003-2019 Masatake YAMATO, Redhat K.K.
-           2004-2019 Albert Chin-A-Young
-           2004-2019 Suzuki Toshiya
+           2003-2020 Masatake YAMATO, Redhat K.K.
+           2004-2020 Albert Chin-A-Young
+           2004-2020 Suzuki Toshiya
            2007 Dmitry Timoshkov for Codeweavers
-           2007-2019 Rahul Bhalerao <rahul.bhalerao@redhat.com>
-           2007-2019 Derek Clegg, Michael Toftdal
-           2009-2018 Oran Agra, Mickey Gabel
-           2010-2019 Joel Klinghed
+           2007-2020 Rahul Bhalerao <rahul.bhalerao@redhat.com>
+           2007-2020 Derek Clegg, Michael Toftdal
+           2009-2020 Oran Agra, Mickey Gabel
+           2010-2020 Joel Klinghed
+           2013-2020 Google, Inc.
+           2019-2020 Nikhil Ramakrishnan
 License: GPL-2+ or FTL
 
 Files: src/3rdparty/freetype/src/pcf/*
@@ -2149,18 +2152,20 @@ License: ICC
  profile.
 
 Files: src/3rdparty/libjpeg/src/*
-Copyright: 2009-2020 D. R. Commander
+Copyright: 2009-2021 D. R. Commander
            2011-2016 Siarhei Siamashka
            2015-2016, 2018 Matthieu Darbois
            2015 Intel Corporation
-           2015 Google, Inc.
+           2015-2020 Google, Inc.
            2013-2014 MIPS Technologies, Inc.
-           2013 Linaro Limited
+           2013-2014 Linaro Limited
            2009-2011 Nokia Corporation and/or its subsidiary(-ies)
-           2009 Pierre Ossman for Cendio AB
+           2009-2012 Pierre Ossman for Cendio AB
            1999-2006 MIYASAKA Masaru
-           1991-2016 Thomas G. Lane, Guido Vollbeding
-           2019 Arm Limited
+           1991-2020 Thomas G. Lane, Guido Vollbeding
+           2018 Matthias Räncker
+           2019-2020 Arm Limited
+           2021 Alex Richardson
 License: libjpeg and BSD-3-clause and Zlib
 
 Files: src/3rdparty/libpng/*.c
@@ -2206,13 +2211,12 @@ Copyright: 2005 The Android Open Source Project
 License: Apache-2.0
 
 Files: src/3rdparty/pcre2/src/*
-Copyright: 1997-2020 University of Cambridge
-           2009-2020 Zoltan Herczeg
+Copyright: 1997-2021 University of Cambridge
+           2009-2021 Zoltan Herczeg
 License: BSD-3-clause
 
 Files: src/3rdparty/pcre2/src/sljit/*
-Copyright: 2013 Tilera Corporation (jiwang@tilera.com)
-           2009-2018 Zoltan Herczeg (hzmester@freemail.hu)
+Copyright: 2009-2020 Zoltan Herczeg <hzmester@freemail.hu>
 License: BSD-2-clause
 
 Files: src/3rdparty/pixman/*

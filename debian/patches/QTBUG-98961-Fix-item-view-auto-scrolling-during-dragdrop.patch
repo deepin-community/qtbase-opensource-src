@@ -9,7 +9,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
 ===================================================================
 --- qtbase-opensource-src.orig/src/widgets/itemviews/qabstractitemview.cpp
 +++ qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
-@@ -3958,14 +3958,14 @@ void QAbstractItemView::doAutoScroll()
+@@ -3961,14 +3961,14 @@ void QAbstractItemView::doAutoScroll()
          }
      }
  
@@ -29,7 +29,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
  
      const QPoint pos = d->draggedPosition - d->offset();
      const QRect area = QWidgetPrivate::get(d->viewport)->clipRect();
-@@ -3980,8 +3980,8 @@ void QAbstractItemView::doAutoScroll()
+@@ -3983,8 +3983,8 @@ void QAbstractItemView::doAutoScroll()
      else if (area.right() - pos.x() < margin)
          horizontalScroll->setValue(horizontalValue + d->autoScrollCount);
      // if nothing changed, stop scrolling
@@ -40,7 +40,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
      if (verticalUnchanged && horizontalUnchanged) {
          stopAutoScroll();
      } else {
-@@ -3989,13 +3989,29 @@ void QAbstractItemView::doAutoScroll()
+@@ -3992,13 +3992,29 @@ void QAbstractItemView::doAutoScroll()
          d->dropIndicatorRect = QRect();
          d->dropIndicatorPosition = QAbstractItemView::OnViewport;
  #endif
