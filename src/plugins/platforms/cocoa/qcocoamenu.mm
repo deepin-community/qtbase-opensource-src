@@ -290,27 +290,26 @@ void QCocoaMenu::syncSeparatorsCollapsible(bool enable)
     QMacAutoReleasePool pool;
     if (enable) {
         bool previousIsSeparator = true; // setting to true kills all the separators placed at the top.
-        NSMenuItem *previousItem = nil;
+        NSMenuItem *lastVisibleItem = nil;
 
         for (NSMenuItem *item in m_nativeMenu.itemArray) {
             if (item.separatorItem) {
+                // hide item if previous was a separator, or if it's explicitly hidden
+                bool hideItem = previousIsSeparator;
                 if (auto *cocoaItem = qt_objc_cast<QCocoaNSMenuItem *>(item).platformMenuItem)
-                    cocoaItem->setVisible(!previousIsSeparator);
-                item.hidden = previousIsSeparator;
+                    hideItem = previousIsSeparator || !cocoaItem->isVisible();
+                item.hidden = hideItem;
             }
 
             if (!item.hidden) {
-                previousItem = item;
-                previousIsSeparator = previousItem.separatorItem;
+                lastVisibleItem = item;
+                previousIsSeparator = lastVisibleItem.separatorItem;
             }
         }
 
         // We now need to check the final item since we don't want any separators at the end of the list.
-        if (previousItem && previousIsSeparator) {
-            if (auto *cocoaItem = qt_objc_cast<QCocoaNSMenuItem *>(previousItem).platformMenuItem)
-                cocoaItem->setVisible(false);
-            previousItem.hidden = YES;
-        }
+        if (lastVisibleItem && lastVisibleItem.separatorItem)
+            lastVisibleItem.hidden = YES;
     } else {
         for (auto *item : qAsConst(m_menuItems)) {
             if (!item->isSeparator())
@@ -350,6 +349,17 @@ void QCocoaMenu::showPopup(const QWindow *parentWindow, const QRect &targetRect,
     QCocoaWindow *cocoaWindow = parentWindow ? static_cast<QCocoaWindow *>(parentWindow->handle()) : nullptr;
     NSView *view = cocoaWindow ? cocoaWindow->view() : nil;
     NSMenuItem *nsItem = item ? ((QCocoaMenuItem *)item)->nsItem() : nil;
+
+    // store the window that this popup belongs to so that we can evaluate whether we are modally blocked
+    bool resetMenuParent = false;
+    if (!menuParent()) {
+        setMenuParent(cocoaWindow);
+        resetMenuParent = true;
+    }
+    auto menuParentGuard = qScopeGuard([&]{
+        if (resetMenuParent)
+            setMenuParent(nullptr);
+    });
 
     QScreen *screen = nullptr;
     if (parentWindow)

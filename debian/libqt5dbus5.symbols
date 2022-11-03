@@ -1,6 +1,6 @@
-# SymbolsHelper-Confirmed: 5.15.3 amd64 arm64
+# SymbolsHelper-Confirmed: 5.15.7 amd64 arm64
 libQt5DBus.so.5 libqt5dbus5 #MINVER#
-| libqt5dbus5 #MINVER#, qtbase-abi-5-15-3
+| libqt5dbus5 #MINVER#, qtbase-abi-5-15-7
 * Build-Depends-Package: qtbase5-dev
  Qt_5.0@Qt_5.0 5.6.0~beta
  Qt_5.10@Qt_5.10 5.10.0
@@ -19,7 +19,7 @@ libQt5DBus.so.5 libqt5dbus5 #MINVER#
  Qt_5.8@Qt_5.8 5.8.0
  Qt_5.9@Qt_5.9 5.9.0~beta
  Qt_5@Qt_5 5.6.0~beta
- Qt_5_PRIVATE_API@Qt_5_PRIVATE_API 5.6.0~beta 1
+ (symver)Qt_5_PRIVATE_API 0 1
  _Z14qDBusReplyFillRK12QDBusMessageR10QDBusErrorR8QVariant@Qt_5 5.0.2
  _Z15qDBusAddSpyHookPFvRK12QDBusMessageE@Qt_5 5.0.2
  _Z18qDBusCheckAsyncTagPKc@Qt_5 5.1.0
@@ -140,18 +140,13 @@ libQt5DBus.so.5 libqt5dbus5 #MINVER#
  _ZN15QDBusConnection7connectERK7QStringS2_S2_S2_RK11QStringListS2_P7QObjectPKc@Qt_5 5.0.2
  _ZN15QDBusConnection7connectERK7QStringS2_S2_S2_S2_P7QObjectPKc@Qt_5 5.0.2
  _ZN15QDBusConnection9systemBusEv@Qt_5 5.0.2
- _ZN15QDBusConnectionC1EP22QDBusConnectionPrivate@Qt_5_PRIVATE_API 5.9.0~beta 1
  _ZN15QDBusConnectionC1ERK7QString@Qt_5 5.0.2
  _ZN15QDBusConnectionC1ERKS_@Qt_5 5.0.2
- _ZN15QDBusConnectionC2EP22QDBusConnectionPrivate@Qt_5_PRIVATE_API 5.9.0~beta 1
  _ZN15QDBusConnectionC2ERK7QString@Qt_5 5.0.2
  _ZN15QDBusConnectionC2ERKS_@Qt_5 5.0.2
  _ZN15QDBusConnectionD1Ev@Qt_5 5.0.2
  _ZN15QDBusConnectionD2Ev@Qt_5 5.0.2
  _ZN15QDBusConnectionaSERKS_@Qt_5 5.0.2
- _ZN15QDBusMetaObject16createMetaObjectERK7QStringS2_R5QHashIS0_PS_ER10QDBusError@Qt_5_PRIVATE_API 5.0.2 1
- _ZN15QDBusMetaObjectC1Ev@Qt_5_PRIVATE_API 5.0.2 1
- _ZN15QDBusMetaObjectC2Ev@Qt_5_PRIVATE_API 5.0.2 1
  _ZN15QDBusObjectPath7doCheckEv@Qt_5 5.0.2
  _ZN16QDBusPendingCall15waitForFinishedEv@Qt_5 5.0.2
  _ZN16QDBusPendingCall17fromCompletedCallERK12QDBusMessage@Qt_5 5.0.2
@@ -163,9 +158,6 @@ libQt5DBus.so.5 libqt5dbus5 #MINVER#
  _ZN16QDBusPendingCallD1Ev@Qt_5 5.0.2
  _ZN16QDBusPendingCallD2Ev@Qt_5 5.0.2
  _ZN16QDBusPendingCallaSERKS_@Qt_5 5.0.2
- _ZN18QDBusIntrospection11parseObjectERK7QStringS2_S2_@Qt_5_PRIVATE_API 5.0.2 1
- _ZN18QDBusIntrospection14parseInterfaceERK7QString@Qt_5_PRIVATE_API 5.0.2 1
- _ZN18QDBusIntrospection15parseInterfacesERK7QString@Qt_5_PRIVATE_API 5.0.2 1
  _ZN18QDBusVirtualObject11qt_metacallEN11QMetaObject4CallEiPPv@Qt_5 5.0.2
  _ZN18QDBusVirtualObject11qt_metacastEPKc@Qt_5 5.0.2
  _ZN18QDBusVirtualObject16staticMetaObjectE@Qt_5 5.0.2
@@ -277,19 +269,7 @@ libQt5DBus.so.5 libqt5dbus5 #MINVER#
  _ZN26QDBusAbstractInterfaceBase11qt_metacallEN11QMetaObject4CallEiPPv@Qt_5 5.0.2
  _ZN26QDBusAbstractInterfaceBaseC1ER29QDBusAbstractInterfacePrivateP7QObject@Qt_5 5.0.2
  _ZN26QDBusAbstractInterfaceBaseC2ER29QDBusAbstractInterfacePrivateP7QObject@Qt_5 5.0.2
- (optional=inline)_ZN7QString5clearEv@Qt_5 5.14.2
- _ZN9QDBusUtil14isValidBusNameERK7QString@Qt_5_PRIVATE_API 5.8.0 1
- _ZN9QDBusUtil16argumentToStringERK8QVariant@Qt_5_PRIVATE_API 5.8.0 1
- _ZN9QDBusUtil16isValidBasicTypeEi@Qt_5_PRIVATE_API 5.8.0 1
- _ZN9QDBusUtil16isValidErrorNameERK7QString@Qt_5_PRIVATE_API 5.8.0 1
- _ZN9QDBusUtil16isValidFixedTypeEi@Qt_5_PRIVATE_API 5.8.0 1
- _ZN9QDBusUtil16isValidSignatureERK7QString@Qt_5_PRIVATE_API 5.8.0 1
- _ZN9QDBusUtil17isValidMemberNameERK10QStringRef@Qt_5_PRIVATE_API 5.8.0 1
- _ZN9QDBusUtil17isValidObjectPathERK7QString@Qt_5_PRIVATE_API 5.8.0 1
- _ZN9QDBusUtil20isValidInterfaceNameERK7QString@Qt_5_PRIVATE_API 5.8.0 1
- _ZN9QDBusUtil22isValidSingleSignatureERK7QString@Qt_5_PRIVATE_API 5.8.0 1
- _ZN9QDBusUtil23isValidPartOfObjectPathERK10QStringRef@Qt_5_PRIVATE_API 5.8.0 1
- _ZN9QDBusUtil27isValidUniqueConnectionNameERK10QStringRef@Qt_5_PRIVATE_API 5.8.0 1
+ _ZN7QString5clearEv@Qt_5 5.15.7
  _ZNK10QDBusError4nameEv@Qt_5 5.0.2
  _ZNK10QDBusError4typeEv@Qt_5 5.0.2
  _ZNK10QDBusError7isValidEv@Qt_5 5.0.2
@@ -365,9 +345,6 @@ libQt5DBus.so.5 libqt5dbus5 #MINVER#
  _ZNK15QDBusConnection9asyncCallERK12QDBusMessagei@Qt_5 5.0.2
  _ZNK15QDBusConnection9interfaceEv@Qt_5 5.0.2
  _ZNK15QDBusConnection9lastErrorEv@Qt_5 5.0.2
- _ZNK15QDBusMetaObject16propertyMetaTypeEi@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK15QDBusMetaObject19inputTypesForMethodEi@Qt_5_PRIVATE_API 5.0.2 1
- _ZNK15QDBusMetaObject20outputTypesForMethodEi@Qt_5_PRIVATE_API 5.0.2 1
  _ZNK15QDBusObjectPathcv8QVariantEv@Qt_5 5.14.1
  _ZNK16QDBusPendingCall10isFinishedEv@Qt_5 5.0.2
  _ZNK16QDBusPendingCall5errorEv@Qt_5 5.0.2
