@@ -1,6 +1,7 @@
 qtbase-opensource-src (5.15.7-1+dde) unstable; urgency=medium
 
   * New upstream release (5.15.7).
+  * Resolve libqtcore4 conflict with libqt5core5a.
 
  -- Duan Ting <duanting@uniontech.com>  Thu, 03 Nov 2022 14:43:40 +0800
 
