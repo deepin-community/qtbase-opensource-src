@@ -1739,9 +1739,6 @@ usr/lib/${DEB_HOST_MULTIARCH}/libQt5XcbQpa.prl
 usr/lib/${DEB_HOST_MULTIARCH}/libQt5XcbQpa.so
 usr/lib/${DEB_HOST_MULTIARCH}/libQt5Xml.prl
 usr/lib/${DEB_HOST_MULTIARCH}/libQt5Xml.so
-usr/lib/${DEB_HOST_MULTIARCH}/metatypes/qt5core_metatypes.json
-usr/lib/${DEB_HOST_MULTIARCH}/metatypes/qt5gui_metatypes.json
-usr/lib/${DEB_HOST_MULTIARCH}/metatypes/qt5widgets_metatypes.json
 usr/lib/${DEB_HOST_MULTIARCH}/pkgconfig/Qt5Concurrent.pc
 usr/lib/${DEB_HOST_MULTIARCH}/pkgconfig/Qt5Core.pc
 usr/lib/${DEB_HOST_MULTIARCH}/pkgconfig/Qt5DBus.pc
