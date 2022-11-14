@@ -1,8 +1,13 @@
 qtbase-opensource-src (5.15.7-1+dde) unstable; urgency=medium
 
+  [ Duan Ting ]
   * New upstream release (5.15.7).
   * Resolve libqtcore4 conflict with libqt5core5a.
   * Restore metatypes package location.
+
+  [ Tang Haixiang ]
+  * QTextLayout: Reconsider cursor drawing on TextObject
+    -- QTBUG-92468-reconsider-cursor-drawing-textObject.patch
 
  -- Duan Ting <duanting@uniontech.com>  Thu, 03 Nov 2022 14:43:40 +0800
 

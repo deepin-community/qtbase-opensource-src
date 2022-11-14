@@ -60,3 +60,4 @@ QTBUG-104050-QMenu-adjust-the-position-of-submenu.patch
 QTBUG-102628-Application-will-crash-if-setWindowsIcon-with-a-big-ICON.patch
 Avoid_adding_null-objects_to_the_icon_cache.patch
 QListView-pageDownUp-infinte-loop.patch
+QTBUG-92468-reconsider-cursor-drawing-textObject.patch
