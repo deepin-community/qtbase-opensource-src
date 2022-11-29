@@ -1,0 +1,128 @@
+package:
+  id: qtbase
+  name: qtbase
+  kind: lib
+  version: 5.15.7-1+dde
+  description: |
+    Qt is a cross-platform C++ application framework. Qt's primary feature
+    is its rich set of widgets that provide standard GUI functionality.
+
+base:
+  id: org.deepin.base
+  version: 23.0.0
+
+source:
+  kind: local
+  patch:
+    - debian/patches/mime_globs.diff
+    - debian/patches/fusion_checkable_qpushbutton.diff
+    - debian/patches/fix_recursion_crash.diff
+    - debian/patches/mysql_field_readonly.diff
+    - debian/patches/openssl3.diff
+    - debian/patches/CVE-2022-25255.diff
+    - debian/patches/gnukfreebsd.diff
+    - debian/patches/no_htmlinfo_example.diff
+    - debian/patches/remove_privacy_breaches.diff
+    - debian/patches/link_fbclient.diff
+    - debian/patches/gnukfreebsd_linker_warnings.diff
+    - debian/patches/armv4.diff
+    - debian/patches/nonlinux_utime.diff
+    - debian/patches/qdoc_default_incdirs.diff
+    - debian/patches/path_max.diff
+    - debian/patches/qstorageinfo_linux.diff
+    - debian/patches/cross_build_mysql.diff
+    - debian/patches/cast_types_for_egl_x11_test.diff
+    - debian/patches/0009-fix_qss_border_cap_style.patch
+    - debian/patches/fix_qrasterpaintengine_rect_for_hidpi.patch
+    - debian/patches/dnot_add_application_path_to_library_path_for_default.patch
+    - debian/patches/fix_action_distance_lineedit.patch
+    - debian/patches/add-sunway-support.patch
+    - debian/patches/QTBUG-85978-85985-QLineEdit-Fix-the-problem-under-the-touch-screen.patch
+    - debian/patches/QTBUG-85088-QGraphicsView-show-error-after-lose-focus.patch
+    - debian/patches/fix-combobox-cant-popup-on-mouse-release.patch
+    - debian/patches/remove-the-X11-True-and-False.patch
+    - debian/patches/feat-touch-screen-QListView-sliding-acceleration.patch
+    - debian/patches/fix-QDoubleSpinbox-and-QSpinbox-not-change-value-when-mouse-scroll.patch
+    - debian/patches/fix-_NET_SUPPORTED-attribute-cannot-be-updated.patch
+    - debian/patches/add-setting-thc-ICON-size-attribute-in-lineedit-to-the-style-plugin.patch
+    - debian/patches/QTBUG-92468-fix-qtextedit-cursor-drawn-incorrectly.patch
+    - debian/patches/QTBUG-92460-don-use-large-icons-in-qlineedit.patch
+    - debian/patches/QTBUG-92366-Check-scrollbar-visibility-when-computing-QListView-Margins.patch
+    - debian/patches/QTBUG-92583-fix-pagedown-behavior-and-pageup.patch
+    - debian/patches/QTBUG-94248-Check-scrollbar-ScrollBarOverlap-when-computing-QListView-margins.patch
+    - debian/patches/QTBUG-94538-fix-cursorTheme-update-issue.patch
+    - debian/patches/fix-QLineEdit-cursor-jumping-on-touch-screen.patch
+    - debian/patches/QTBUG-95011-do-not-change-layout-direction-on-keyboard-input.patch
+    - debian/patches/QTBUG-95607-Close-all-popup-windows-when-the-screen-is-rotated.patch
+    - debian/patches/QTBUG-95341-Account-for-the-placeholderText-when-computing-lineRect.patch
+    - debian/patches/QTBUG-95942-Fix-text-ellipsis-not-implemented-in-Tibetan.patch
+    - debian/patches/QTBUG-96288-Fix-QTextEdit-cursor-rectangle-vertical-positioning.patch
+    - debian/patches/QTBUG-94769-Take-overshoot-into-account-when-laying-out-QAbstractScrollArea.patch
+    - debian/patches/QTBUG-96124-QAbstractItemView-auto-scroll-with-selection-rectangle.patch
+    - debian/patches/QTBUG-94028-plaintextEdit-draw-text-with-clipRect-should-consider-cusorWidth.patch
+    - debian/patches/QTBUG-98099-QFontComboBox-do-not-response-qApp-fontDatabaseChanged.patch
+    - debian/patches/QTBUG-98961-Fix-item-view-auto-scrolling-during-dragdrop.patch
+    - debian/patches/QTBUG-99163-Use-qint64-to-replace-int-while-qt_transform_image_rasterize.patch
+    - debian/patches/QTBUG-98247-Test-result-of-qobject_cast-before-dereferencing.patch
+    - debian/patches/QTBUG-99512-Always-update-pressedPosition-when-drag-was-enabled.patch
+    - debian/patches/auto-select-opengl-or-opengles.patch
+    - debian/patches/QTBUG-81696-QHighDpi-revert-window-on-multiple-screens-handling.patch
+    - debian/patches/QTBUG-104050-QMenu-adjust-the-position-of-submenu.patch
+    - debian/patches/QTBUG-102628-Application-will-crash-if-setWindowsIcon-with-a-big-ICON.patch
+    - debian/patches/Avoid_adding_null-objects_to_the_icon_cache.patch
+    - debian/patches/QListView-pageDownUp-infinte-loop.patch
+    - debian/patches/QTBUG-92468-reconsider-cursor-drawing-textObject.patch
+
+build:
+  kind: manual
+  manual:
+    configure: |
+      # exec bash
+      ./configure -prefix ${PREFIX} \
+        -libdir ${PREFIX}/lib/${TRIPLET} \
+        -plugindir ${PREFIX}/lib/${TRIPLET}/qt5/plugins \
+        -qmldir ${PREFIX}/lib/${TRIPLET}/qt5/qml \
+        -headerdir ${PREFIX}/include/${TRIPLET}/qt5 \
+        -datadir ${PREFIX}/share/qt5 \
+        -translationdir ${PREFIX}/share/qt5/translations \
+        -archdatadir ${PREFIX}/lib/${TRIPLET}/qt5 \
+        -sysconfdir ${PREFIX}/etc/xdg \
+        -docdir ${PREFIX}/share/qt5/doc \
+        -importdir ${PREFIX}/lib/${TRIPLET}/qt5/imports \
+        -hostdatadir ${PREFIX}/lib/${TRIPLET}/qt5 \
+        -confirm-license \
+        -opensource \
+        -plugin-sql-mysql \
+        -plugin-sql-odbc \
+        -plugin-sql-psql \
+        -plugin-sql-sqlite \
+        -no-sql-sqlite2 \
+        -plugin-sql-tds \
+        -system-sqlite \
+        -platform linux-g++ \
+        -system-harfbuzz \
+        -system-zlib \
+        -system-libpng \
+        -system-libjpeg \
+        -system-doubleconversion \
+        -system-pcre \
+        -openssl \
+        -no-rpath \
+        -verbose \
+        -optimized-qmake \
+        -dbus-linked \
+        -no-strip \
+        -no-separate-debug-info \
+        -qpa xcb \
+        -xcb \
+        -glib \
+        -icu \
+        -accessibility \
+        -nomake examples \
+        -no-directfb \
+        -no-use-gold-linker \
+        -opengl desktop
+        # exec bash
+        make ${jobs}
+        make -j1 install
+
