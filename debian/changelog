@@ -1,6 +1,8 @@
 qtbase-opensource-src (5.15.7.1-1+dde) UNRELEASED; urgency=medium
 
   * Install QtXcbQpa private headers.
+  * dbus: add filter hook
+    -- QTBUG-108092-add-filter-hook.patch
 
  -- Lu YaNing <luyaning@uniontech.com>  Mon, 05 Dec 2022 13:25:17 +0800
 

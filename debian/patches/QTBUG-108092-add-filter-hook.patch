@@ -1,0 +1,147 @@
+Author: Lu YaNing <luyaning@uniontech.com>
+Date:   Mon 05 Dec 2022 16:30:20 +0800
+Subject: dbus: add filter hook
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/440744
+
+Index: qtbase-opensource-src/src/dbus/qdbusconnection_p.h
+===================================================================
+--- qtbase-opensource-src.orig/src/dbus/qdbusconnection_p.h
++++ qtbase-opensource-src/src/dbus/qdbusconnection_p.h
+@@ -301,6 +301,7 @@ private slots:
+ signals:
+     void dispatchStatusChanged();
+     void spyHooksFinished(const QDBusMessage &msg);
++    void filterHooksFinished(const QDBusMessage &msg);
+     void messageNeedsSending(QDBusPendingCallPrivate *pcall, void *msg, int timeout = -1);
+     bool signalNeedsConnecting(const QString &key, const QDBusConnectionPrivate::SignalHook &hook);
+     bool signalNeedsDisconnecting(const QString &key, const QDBusConnectionPrivate::SignalHook &hook);
+Index: qtbase-opensource-src/src/dbus/qdbusintegrator.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/dbus/qdbusintegrator.cpp
++++ qtbase-opensource-src/src/dbus/qdbusintegrator.cpp
+@@ -132,6 +132,8 @@ qdbusThreadDebugFunc qdbusThreadDebug =
+ 
+ typedef QVarLengthArray<QDBusSpyCallEvent::Hook, 4> QDBusSpyHookList;
+ Q_GLOBAL_STATIC(QDBusSpyHookList, qDBusSpyHookList)
++typedef QVarLengthArray<QDBusFilterCallEvent::Hook, 4> QDBusFilterHookList;
++Q_GLOBAL_STATIC(QDBusFilterHookList, qDBusFilterHookList)
+ 
+ extern "C" {
+ 
+@@ -486,7 +488,6 @@ static QDBusConnectionPrivate::ArgMatchR
+     return matchArgs;
+ }
+ 
+-
+ extern Q_DBUS_EXPORT void qDBusAddSpyHook(QDBusSpyCallEvent::Hook);
+ void qDBusAddSpyHook(QDBusSpyCallEvent::Hook hook)
+ {
+@@ -515,6 +516,42 @@ inline void QDBusSpyCallEvent::invokeSpy
+         hooks[i](msg);
+ }
+ 
++extern Q_DBUS_EXPORT void qDBusAddFilterHook(QDBusFilterCallEvent::Hook);
++void qDBusAddFilterHook(QDBusFilterCallEvent::Hook hook)
++{
++    qDBusFilterHookList()->append(hook);
++}
++
++QDBusFilterCallEvent::~QDBusFilterCallEvent()
++{
++    // According to the result of these filters,
++    // determine whether to reinsert the message into the processing queue for the connection.
++    // This is done in the destructor so the message is reinserted even if QCoreApplication is destroyed.
++    if (!needReinsert) {
++        return;
++    }
++    QDBusConnectionPrivate *d = static_cast<QDBusConnectionPrivate *>(const_cast<QObject *>(sender()));
++    qDBusDebug() << d << "message filter done for" << msg;
++    emit d->filterHooksFinished(msg);
++}
++
++void QDBusFilterCallEvent::placeMetaCall(QObject *)
++{
++    QDBusConnectionPrivate *d = static_cast<QDBusConnectionPrivate *>(const_cast<QObject *>(sender()));
++    invokeFilterHooks(msg, hooks, hookCount, d->baseService, needReinsert);
++}
++
++inline void QDBusFilterCallEvent::invokeFilterHooks(const QDBusMessage &msg, const Hook *hooks, int hookCount, const QString &baseService, bool &needReinsert)
++{
++    needReinsert = true;
++    for (int i = 0; i < hookCount; ++i) {
++        if (hooks[i](baseService, msg) != 0) {
++            needReinsert = false;
++            return;
++        }
++    }
++}
++
+ extern "C" {
+ static DBusHandlerResult
+ qDBusSignalFilter(DBusConnection *connection, DBusMessage *message, void *data)
+@@ -576,6 +613,26 @@ bool QDBusConnectionPrivate::handleMessa
+             }
+         }
+ 
++        if (Q_UNLIKELY(qDBusFilterHookList.exists()) && qApp) {
++            const QDBusFilterHookList &list = *qDBusFilterHookList;
++            if (isLocal) {
++                Q_ASSERT(QThread::currentThread() != thread());
++                qDBusDebug() << this << "invoking message filters directly";
++                bool needReinsert = true;
++                QDBusFilterCallEvent::invokeFilterHooks(amsg, list.constData(), list.size(), baseService, needReinsert);
++                if (!needReinsert) {
++                    return true;
++                }
++            } else {
++                qDBusDebug() << this << "invoking message filters via event";
++                QCoreApplication::postEvent(qApp, new QDBusFilterCallEvent(this, QDBusConnection(this),
++                                                                        amsg, list.constData(), list.size()));
++
++                // we'll be called back, so return
++                return true;
++            }
++        }
++
+         handleObjectCall(amsg);
+         return true;
+     case QDBusMessage::ReplyMessage:
+@@ -1051,6 +1108,8 @@ QDBusConnectionPrivate::QDBusConnectionP
+             this, &QDBusConnectionPrivate::doDispatch, Qt::QueuedConnection);
+     connect(this, &QDBusConnectionPrivate::spyHooksFinished,
+             this, &QDBusConnectionPrivate::handleObjectCall, Qt::QueuedConnection);
++    connect(this, &QDBusConnectionPrivate::filterHooksFinished,
++            this, &QDBusConnectionPrivate::handleObjectCall, Qt::QueuedConnection);
+     connect(this, &QDBusConnectionPrivate::messageNeedsSending,
+             this, &QDBusConnectionPrivate::sendInternal);
+     connect(this, &QDBusConnectionPrivate::signalNeedsConnecting,
+Index: qtbase-opensource-src/src/dbus/qdbusintegrator_p.h
+===================================================================
+--- qtbase-opensource-src.orig/src/dbus/qdbusintegrator_p.h
++++ qtbase-opensource-src/src/dbus/qdbusintegrator_p.h
+@@ -161,6 +161,25 @@ public:
+     int hookCount;
+ };
+ 
++class QDBusFilterCallEvent : public QAbstractMetaCallEvent
++{
++public:
++    typedef int (*Hook)(const QString&, const QDBusMessage&);
++    QDBusFilterCallEvent(QDBusConnectionPrivate *cp, const QDBusConnection &c, const QDBusMessage &msg,
++                      const Hook *hooks, int count)
++        : QAbstractMetaCallEvent(cp, 0), conn(c), msg(msg), hooks(hooks), hookCount(count)
++    {}
++    ~QDBusFilterCallEvent() override;
++    void placeMetaCall(QObject *) override;
++    static inline void invokeFilterHooks(const QDBusMessage &msg, const Hook *hooks, int hookCount, const QString &baseService, bool &needReinsert);
++
++    QDBusConnection conn;
++    QDBusMessage msg;
++    const Hook *hooks;
++    int hookCount;
++    bool needReinsert;
++};
++
+ QT_END_NAMESPACE
+ 
+ Q_DECLARE_METATYPE(QDBusSlotCache)
