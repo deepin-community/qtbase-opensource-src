@@ -104,6 +104,7 @@ usr/include/${DEB_HOST_MULTIARCH}/qt5/QtThemeSupport/QtThemeSupportDepends
 usr/include/${DEB_HOST_MULTIARCH}/qt5/QtThemeSupport/QtThemeSupportVersion
 usr/include/${DEB_HOST_MULTIARCH}/qt5/QtThemeSupport/qtthemesupportversion.h
 usr/include/${DEB_HOST_MULTIARCH}/qt5/QtWidgets/5.*/*
+usr/include/${DEB_HOST_MULTIARCH}/qt5/QtXcb/5.*/*
 usr/include/${DEB_HOST_MULTIARCH}/qt5/QtXkbCommonSupport/5.*/*
 usr/include/${DEB_HOST_MULTIARCH}/qt5/QtXkbCommonSupport/QtXkbCommonSupport
 usr/include/${DEB_HOST_MULTIARCH}/qt5/QtXkbCommonSupport/QtXkbCommonSupportDepends

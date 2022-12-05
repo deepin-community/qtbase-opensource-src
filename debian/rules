@@ -19,6 +19,8 @@ sslpkgname := $(shell dpkg-query --show '--showformat=$${Depends}' libssl-dev | 
 # Upstream changelog
 upstream_changes := dist/changes-$(shell echo $(DEB_VERSION_UPSTREAM) | sed -e 's/+dfsg//' | sed -e 's/+git.*//')
 
+upstream_version := $(shell echo $(DEB_VERSION_UPSTREAM) | sed -r "s/.*([0-9]+\.[0-9]+\.[0-9]+)(\.[0-9]+).*/\1/g")
+
 ifneq (,$(filter libqt5sql5-ibase,$(shell dh_listpackages)))
 	extra_configure_opts += -plugin-sql-ibase
 else
@@ -300,6 +302,9 @@ endif
 	# Reproducible builds: remove build paths from .prl files.
 	sed -i -e '/^QMAKE_PRL_BUILD_DIR/d' debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/libQt5*.prl \
 		debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/qt5/examples/widgets/tools/plugandpaint/plugins/libpnp_basictools.prl
+
+	install -D -t debian/tmp/usr/include/$(DEB_HOST_MULTIARCH)/qt5/QtXcb/$(upstream_version)/QtXcb/private \
+		src/plugins/platforms/xcb/*.h
 
 override_dh_auto_install-indep:
 	dh_auto_build -- INSTALL_ROOT=$(CURDIR)/debian/tmp install_docs
