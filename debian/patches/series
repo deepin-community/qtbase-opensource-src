@@ -62,3 +62,5 @@ Avoid_adding_null-objects_to_the_icon_cache.patch
 QListView-pageDownUp-infinte-loop.patch
 QTBUG-92468-reconsider-cursor-drawing-textObject.patch
 QTBUG-108092-add-filter-hook.patch
+QTBUG-101347-revert-xcb-implement-missing-bits-form-icccm414-WM_STATE-handling.patch
+
