@@ -1,3 +1,9 @@
+qtbase-opensource-src (5.15.7.2-1+dde) UNRELEASED; urgency=medium
+
+  * add-forkfd_pidfd-feature-option & riscv64 enable it
+
+ -- Han Gao <gaohan@iscas.ac.cn>  Fri, 30 Dec 2022 06:25:26 +0800
+
 qtbase-opensource-src (5.15.7.1-1+dde) unstable; urgency=medium
 
   * Install QtXcbQpa private headers.

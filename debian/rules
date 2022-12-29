@@ -48,6 +48,12 @@ ifeq ($(DEB_HOST_ARCH),ia64)
 	extra_configure_opts += QMAKE_CFLAGS_OPTIMIZE_FULL-=-O3
 endif
 
+# remove forkfd_pidfd in riscv64
+# https://github.com/felixonmars/archriscv-packages/pull/1151#issuecomment-1100954643
+ifeq ($(DEB_HOST_ARCH),riscv64)
+        extra_configure_opts += -no-feature-forkfd_pidfd
+endif
+
 # Compile without sse2 support on i386
 # Do not use precompiled headers in order to be able to rebuild the gui
 # submodule.
