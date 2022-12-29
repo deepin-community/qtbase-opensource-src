@@ -5,6 +5,7 @@ fix_recursion_crash.diff
 mysql_field_readonly.diff
 openssl3.diff
 CVE-2022-25255.diff
+add-forkfd_pidfd-feature-option.patch
 
 # Debian specific.
 gnukfreebsd.diff
