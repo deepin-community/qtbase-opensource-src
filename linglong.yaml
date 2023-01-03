@@ -20,6 +20,7 @@ source:
     - debian/patches/mysql_field_readonly.diff
     - debian/patches/openssl3.diff
     - debian/patches/CVE-2022-25255.diff
+    - debian/patches/add-forkfd_pidfd-feature-option.patch
     - debian/patches/gnukfreebsd.diff
     - debian/patches/no_htmlinfo_example.diff
     - debian/patches/remove_privacy_breaches.diff
@@ -72,6 +73,7 @@ source:
     - debian/patches/Avoid_adding_null-objects_to_the_icon_cache.patch
     - debian/patches/QListView-pageDownUp-infinte-loop.patch
     - debian/patches/QTBUG-92468-reconsider-cursor-drawing-textObject.patch
+    - debian/patches/QTBUG-108092-add-filter-hook.patch
 
 build:
   kind: manual
