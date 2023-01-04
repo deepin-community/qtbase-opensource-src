@@ -74,6 +74,7 @@ source:
     - debian/patches/QListView-pageDownUp-infinte-loop.patch
     - debian/patches/QTBUG-92468-reconsider-cursor-drawing-textObject.patch
     - debian/patches/QTBUG-108092-add-filter-hook.patch
+    - debian/patches/QTBUG-101347-revert-xcb-implement-missing-bits-form-icccm414-WM_STATE-handling.patch
 
 build:
   kind: manual
