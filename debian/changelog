@@ -1,4 +1,4 @@
-qtbase-opensource-src (5.15.7.2-1+dde) UNRELEASED; urgency=medium
+qtbase-opensource-src (5.15.7.2-1+dde) unstable; urgency=medium
 
   [ Han Gao ]
   * add-forkfd_pidfd-feature-option & riscv64 enable it
@@ -7,7 +7,7 @@ qtbase-opensource-src (5.15.7.2-1+dde) UNRELEASED; urgency=medium
   * Revert "xcb: implement missing bits from ICCCM 4.1.4 WM_STATE handling"
     -- QTBUG-101347-revert-xcb-implement-missing-bits-form-icccm414-WM_STATE-handling.patch
 
- -- Han Gao <gaohan@iscas.ac.cn>  Fri, 30 Dec 2022 06:25:26 +0800
+ -- Lu YaNing <luyaning@uniontech.com>  Tue, 10 Jan 2023 10:45:55 +0800
 
 qtbase-opensource-src (5.15.7.1-1+dde) unstable; urgency=medium
 
