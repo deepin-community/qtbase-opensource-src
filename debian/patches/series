@@ -6,6 +6,7 @@ mysql_field_readonly.diff
 openssl3.diff
 CVE-2022-25255.diff
 add-forkfd_pidfd-feature-option.patch
+openssl_set_options.diff
 
 # Debian specific.
 gnukfreebsd.diff
@@ -20,6 +21,7 @@ path_max.diff
 qstorageinfo_linux.diff
 cross_build_mysql.diff
 cast_types_for_egl_x11_test.diff
+revert_startBlocking_removal.diff
 
 #uos
 0009-fix_qss_border_cap_style.patch
@@ -40,17 +42,13 @@ QTBUG-92460-don-use-large-icons-in-qlineedit.patch
 QTBUG-92366-Check-scrollbar-visibility-when-computing-QListView-Margins.patch
 QTBUG-92583-fix-pagedown-behavior-and-pageup.patch
 QTBUG-94248-Check-scrollbar-ScrollBarOverlap-when-computing-QListView-margins.patch
-QTBUG-94538-fix-cursorTheme-update-issue.patch
 fix-QLineEdit-cursor-jumping-on-touch-screen.patch
 QTBUG-95011-do-not-change-layout-direction-on-keyboard-input.patch
 QTBUG-95607-Close-all-popup-windows-when-the-screen-is-rotated.patch
 QTBUG-95341-Account-for-the-placeholderText-when-computing-lineRect.patch
 QTBUG-95942-Fix-text-ellipsis-not-implemented-in-Tibetan.patch
 QTBUG-96288-Fix-QTextEdit-cursor-rectangle-vertical-positioning.patch
-QTBUG-94769-Take-overshoot-into-account-when-laying-out-QAbstractScrollArea.patch
 QTBUG-96124-QAbstractItemView-auto-scroll-with-selection-rectangle.patch
-QTBUG-94028-plaintextEdit-draw-text-with-clipRect-should-consider-cusorWidth.patch
-QTBUG-98099-QFontComboBox-do-not-response-qApp-fontDatabaseChanged.patch
 QTBUG-98961-Fix-item-view-auto-scrolling-during-dragdrop.patch
 QTBUG-99163-Use-qint64-to-replace-int-while-qt_transform_image_rasterize.patch
 QTBUG-98247-Test-result-of-qobject_cast-before-dereferencing.patch

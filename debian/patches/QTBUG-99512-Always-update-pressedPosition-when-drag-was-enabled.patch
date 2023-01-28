@@ -8,26 +8,28 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
 ===================================================================
 --- qtbase-opensource-src.orig/src/widgets/itemviews/qabstractitemview.cpp
 +++ qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
-@@ -1788,9 +1788,16 @@ void QAbstractItemView::mousePressEvent(
+@@ -1789,11 +1789,16 @@ void QAbstractItemView::mousePressEvent(
      QItemSelectionModel::SelectionFlags command = selectionCommand(index, event);
      d->noSelectionOnMousePress = command == QItemSelectionModel::NoUpdate || !index.isValid();
      QPoint offset = d->offset();
 -    d->pressedPosition = d->draggedPosition = pos + offset;
 -    if (!(command & QItemSelectionModel::Current))
+-        d->currentSelectionStartIndex = index;
 +    d->draggedPosition = pos + offset;
 +
 +    // update the pressed position when drag was enable
 +    if (d->dragEnabled)
 +        d->pressedPosition = d->draggedPosition;
-+
+ 
+-    else if (!d->currentSelectionStartIndex.isValid())
 +    if (!(command & QItemSelectionModel::Current)) {
 +        d->pressedPosition = pos + offset;
-         d->currentSelectionStartIndex = index;
-+    }
- 
-     else if (!d->currentSelectionStartIndex.isValid())
++        d->currentSelectionStartIndex = index;
++    } else if (!d->currentSelectionStartIndex.isValid())
          d->currentSelectionStartIndex = currentIndex();
-@@ -1811,7 +1818,7 @@ void QAbstractItemView::mousePressEvent(
+ 
+     if (edit(index, NoEditTriggers, event))
+@@ -1812,7 +1817,7 @@ void QAbstractItemView::mousePressEvent(
              command |= d->ctrlDragSelectionFlag;
          }
  
@@ -36,7 +38,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
              setSelection(QRect(pos, QSize(1, 1)), command);
          } else {
              QRect rect(visualRect(d->currentSelectionStartIndex).center(), pos);
-@@ -1896,16 +1903,10 @@ void QAbstractItemView::mouseMoveEvent(Q
+@@ -1897,16 +1902,10 @@ void QAbstractItemView::mouseMoveEvent(Q
          || edit(index, NoEditTriggers, event))
          return;
  

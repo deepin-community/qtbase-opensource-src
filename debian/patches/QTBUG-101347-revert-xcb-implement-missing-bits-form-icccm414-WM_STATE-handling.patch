@@ -12,27 +12,27 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.cpp
 @@ -564,11 +564,6 @@ void QXcbWindow::setGeometry(const QRect
  {
      QPlatformWindow::setGeometry(rect);
-
+ 
 -    if (shouldDeferTask(Task::SetGeometry)) {
 -        m_deferredGeometry = rect;
 -        return;
 -    }
 -
      propagateSizeHints();
-
+ 
      QXcbScreen *currentScreen = xcbScreen();
 @@ -693,9 +688,6 @@ void QXcbWindow::setVisible(bool visible
-
+ 
  void QXcbWindow::show()
  {
 -    if (shouldDeferTask(Task::Map))
 -        return;
 -
      if (window()->isTopLevel()) {
-
+ 
          // update WM_NORMAL_HINTS
 @@ -746,10 +738,6 @@ void QXcbWindow::show()
-
+ 
  void QXcbWindow::hide()
  {
 -    if (shouldDeferTask(Task::Unmap))
@@ -40,31 +40,31 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.cpp
 -
 -    m_wmStateValid = false;
      xcb_unmap_window(xcb_connection(), m_window);
-
+ 
      // send synthetic UnmapNotify event according to icccm 4.1.4
 @@ -909,9 +897,6 @@ QXcbWindow::NetWmStates QXcbWindow::netW
-
+ 
  void QXcbWindow::setWindowFlags(Qt::WindowFlags flags)
  {
 -    if (shouldDeferTask(Task::SetWindowFlags))
 -        return;
 -
      Qt::WindowType type = static_cast<Qt::WindowType>(int(flags & Qt::WindowType_Mask));
-
+ 
      if (type == Qt::ToolTip)
 @@ -941,8 +926,6 @@ void QXcbWindow::setWindowFlags(Qt::Wind
-
+ 
      setTransparentForMouseEvents(flags & Qt::WindowTransparentForInput);
      updateDoesNotAcceptFocus(flags & Qt::WindowDoesNotAcceptFocus);
 -
 -    m_isWmManagedWindow = !(flags & Qt::X11BypassWindowManagerHint);
  }
-
+ 
  void QXcbWindow::setMotifWmHints(Qt::WindowFlags flags)
 @@ -1142,9 +1125,6 @@ void QXcbWindow::setWindowState(Qt::Wind
      if (state == m_windowState)
          return;
-
+ 
 -    if (shouldDeferTask(Task::SetWindowState))
 -        return;
 -
@@ -75,17 +75,17 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.cpp
      if (event->window == m_window) {
          m_mapped = false;
          QWindowSystemInterface::handleExposeEvent(window(), QRegion());
--        if (!m_isWmManagedWindow) {
+-        if (!m_isWmManagedWindow || parent()) {
 -            m_wmStateValid = true;
 -            handleDeferredTasks();
 -        }
      }
  }
-
+ 
 @@ -2218,98 +2194,30 @@ void QXcbWindow::handleLeaveNotifyEvent(
      handleLeaveNotifyEvent(event->root_x, event->root_y, event->mode, event->detail, event->time);
  }
-
+ 
 -bool QXcbWindow::shouldDeferTask(Task task)
 -{
 -    if (m_wmStateValid)
@@ -146,7 +146,7 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.cpp
  void QXcbWindow::handlePropertyNotifyEvent(const xcb_property_notify_event_t *event)
  {
      connection()->setTime(event->time);
-
+ 
 -    const bool wmStateChanged = event->atom == atom(QXcbAtom::WM_STATE);
 -    const bool netWmStateChanged = event->atom == atom(QXcbAtom::_NET_WM_STATE);
 -    if (netWmStateChanged || wmStateChanged) {
@@ -165,7 +165,7 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.cpp
 +    if (event->atom == atom(QXcbAtom::_NET_WM_STATE) || event->atom == atom(QXcbAtom::WM_STATE)) {
 +        if (propertyDeleted)
              return;
-
+ 
 -        if (wmStateChanged) {
 +        Qt::WindowStates newState = Qt::WindowNoState;
 +
@@ -186,7 +186,7 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.cpp
 +                                   || (data[0] == XCB_ICCCM_WM_STATE_WITHDRAWN && m_minimized));
              }
          }
-
+ 
 -        // _NET_WM_STATE handling
 -        Qt::WindowStates newState = Qt::WindowNoState;
          const NetWmStates states = netWmStates();
@@ -205,9 +205,9 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.h
 --- qtbase-opensource-src.orig/src/plugins/platforms/xcb/qxcbwindow.h
 +++ qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.h
 @@ -74,14 +74,6 @@ public:
-
+ 
      Q_DECLARE_FLAGS(NetWmStates, NetWmState)
-
+ 
 -    enum Task {
 -        Map,
 -        Unmap,
@@ -218,20 +218,20 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.h
 -
      QXcbWindow(QWindow *window);
      ~QXcbWindow();
-
+ 
 @@ -151,9 +143,6 @@ public:
-
+ 
      QXcbWindow *toWindow() override;
-
+ 
 -    bool shouldDeferTask(Task task);
 -    void handleDeferredTasks();
 -
      void handleMouseEvent(xcb_timestamp_t time, const QPoint &local, const QPoint &global,
                            Qt::KeyboardModifiers modifiers, QEvent::Type type, Qt::MouseEventSource source);
-
+ 
 @@ -292,11 +281,6 @@ protected:
      int m_swapInterval = -1;
-
+ 
      qreal m_sizeHintsScaleFactor = 1.0;
 -
 -    bool m_wmStateValid = true;
@@ -239,5 +239,5 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.h
 -    bool m_isWmManagedWindow = true;
 -    QRect m_deferredGeometry;
  };
-
+ 
  class QXcbForeignWindow : public QXcbWindow

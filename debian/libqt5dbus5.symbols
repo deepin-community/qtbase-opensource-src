@@ -1,6 +1,6 @@
-# SymbolsHelper-Confirmed: 5.15.7 amd64 arm64
+# SymbolsHelper-Confirmed: 5.15.8 amd64
 libQt5DBus.so.5 libqt5dbus5 #MINVER#
-| libqt5dbus5 #MINVER#, qtbase-abi-5-15-7
+| libqt5dbus5 #MINVER#, qtbase-abi-5-15-8
 * Build-Depends-Package: qtbase5-dev
  Qt_5.0@Qt_5.0 5.6.0~beta
  Qt_5.10@Qt_5.10 5.10.0
@@ -22,6 +22,7 @@ libQt5DBus.so.5 libqt5dbus5 #MINVER#
  (symver)Qt_5_PRIVATE_API 0 1
  _Z14qDBusReplyFillRK12QDBusMessageR10QDBusErrorR8QVariant@Qt_5 5.0.2
  _Z15qDBusAddSpyHookPFvRK12QDBusMessageE@Qt_5 5.0.2
+ _Z18qDBusAddFilterHookPFiRK7QStringRK12QDBusMessageE@Qt_5 5.15.8
  _Z18qDBusCheckAsyncTagPKc@Qt_5 5.1.0
  _Z22qDBusBindToApplicationv@Qt_5 5.0.2
  _Z24qDBusParametersForMethodRK5QListI10QByteArrayER7QVectorIiER7QString@Qt_5 5.2.0~alpha1

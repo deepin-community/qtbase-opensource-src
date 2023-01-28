@@ -2210,6 +2210,10 @@ Files: src/3rdparty/android/extract.h
 Copyright: 2005 The Android Open Source Project
 License: Apache-2.0
 
+Files: src/3rdparty/gradle/*
+Copyright: 2021 Gradle Inc.
+License: Apache-2.0
+
 Files: src/3rdparty/pcre2/src/*
 Copyright: 1997-2021 University of Cambridge
            2009-2021 Zoltan Herczeg

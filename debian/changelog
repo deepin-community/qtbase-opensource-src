@@ -1,3 +1,9 @@
+qtbase-opensource-src (5.15.8-1+dde) UNRELEASED; urgency=medium
+
+  * New upstream release (5.15.8).
+
+ -- Lu YaNing <luyaning@uniontech.com>  Sat, 28 Jan 2023 16:18:43 +0800
+
 qtbase-opensource-src (5.15.7.2-1+dde) unstable; urgency=medium
 
   [ Han Gao ]
