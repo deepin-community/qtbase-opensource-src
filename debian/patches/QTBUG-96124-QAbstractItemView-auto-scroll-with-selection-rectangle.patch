@@ -8,7 +8,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
 ===================================================================
 --- qtbase-opensource-src.orig/src/widgets/itemviews/qabstractitemview.cpp
 +++ qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
-@@ -1779,8 +1779,7 @@ void QAbstractItemView::mousePressEvent(
+@@ -1780,8 +1780,7 @@ void QAbstractItemView::mousePressEvent(
      QPoint pos = event->pos();
      QPersistentModelIndex index = indexAt(pos);
  
@@ -18,7 +18,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
          return;
  
      d->pressedAlreadySelected = d->selectionModel->isSelected(index);
-@@ -1789,10 +1788,10 @@ void QAbstractItemView::mousePressEvent(
+@@ -1790,10 +1789,10 @@ void QAbstractItemView::mousePressEvent(
      QItemSelectionModel::SelectionFlags command = selectionCommand(index, event);
      d->noSelectionOnMousePress = command == QItemSelectionModel::NoUpdate || !index.isValid();
      QPoint offset = d->offset();
@@ -32,7 +32,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
      else if (!d->currentSelectionStartIndex.isValid())
          d->currentSelectionStartIndex = currentIndex();
  
-@@ -1873,6 +1872,8 @@ void QAbstractItemView::mouseMoveEvent(Q
+@@ -1874,6 +1873,8 @@ void QAbstractItemView::mouseMoveEvent(Q
      QPoint topLeft;
      QPoint bottomRight = event->pos();
  
@@ -41,7 +41,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
      if (state() == ExpandingState || state() == CollapsingState)
          return;
  
-@@ -1932,10 +1933,10 @@ void QAbstractItemView::mouseMoveEvent(Q
+@@ -1933,10 +1934,10 @@ void QAbstractItemView::mouseMoveEvent(Q
          setSelection(selectionRect, command);
  
          // set at the end because it might scroll the view
@@ -55,7 +55,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
      }
  }
  
-@@ -2053,6 +2054,7 @@ void QAbstractItemView::dragEnterEvent(Q
+@@ -2054,6 +2055,7 @@ void QAbstractItemView::dragEnterEvent(Q
  void QAbstractItemView::dragMoveEvent(QDragMoveEvent *event)
  {
      Q_D(QAbstractItemView);
@@ -63,7 +63,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
      if (dragDropMode() == InternalMove
          && (event->source() != this || !(event->possibleActions() & Qt::MoveAction)))
          return;
-@@ -3968,8 +3970,8 @@ void QAbstractItemView::doAutoScroll()
+@@ -3969,8 +3971,8 @@ void QAbstractItemView::doAutoScroll()
      int verticalValue = verticalScroll->value();
      int horizontalValue = horizontalScroll->value();
  
@@ -74,7 +74,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
  
      // do the scrolling if we are in the scroll margins
      if (pos.y() - area.top() < margin)
-@@ -3990,6 +3992,14 @@ void QAbstractItemView::doAutoScroll()
+@@ -3991,6 +3993,14 @@ void QAbstractItemView::doAutoScroll()
          d->dropIndicatorRect = QRect();
          d->dropIndicatorPosition = QAbstractItemView::OnViewport;
  #endif
@@ -105,7 +105,7 @@ Index: qtbase-opensource-src/tests/auto/widgets/itemviews/qabstractitemview/tst_
 ===================================================================
 --- qtbase-opensource-src.orig/tests/auto/widgets/itemviews/qabstractitemview/tst_qabstractitemview.cpp
 +++ qtbase-opensource-src/tests/auto/widgets/itemviews/qabstractitemview/tst_qabstractitemview.cpp
-@@ -150,6 +150,8 @@ private slots:
+@@ -151,6 +151,8 @@ private slots:
      void checkFocusAfterActivationChanges_data();
      void checkFocusAfterActivationChanges();
      void dragSelectAfterNewPress();
@@ -113,12 +113,12 @@ Index: qtbase-opensource-src/tests/auto/widgets/itemviews/qabstractitemview/tst_
 +    void selectionAutoScrolling();
      void dragWithSecondClick_data();
      void dragWithSecondClick();
- private:
-@@ -2513,6 +2515,121 @@ void tst_QAbstractItemView::dragSelectAf
+     void clickAfterDoubleClick();
+@@ -2516,6 +2518,121 @@ void tst_QAbstractItemView::dragSelectAf
          QVERIFY(selected.contains(model.index(i, 0)));
  }
  
-++void tst_QAbstractItemView::selectionAutoScrolling_data()
++void tst_QAbstractItemView::selectionAutoScrolling_data()
 +{
 +    QTest::addColumn<Qt::Orientation>("orientation");
 +    QTest::addColumn<int>("direction"); // negative or positive

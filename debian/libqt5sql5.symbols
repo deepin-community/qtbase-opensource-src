@@ -1,6 +1,6 @@
 # SymbolsHelper-Confirmed: 5.15.1 amd64 i386
 libQt5Sql.so.5 libqt5sql5 #MINVER#
-| libqt5sql5 #MINVER#, qtbase-abi-5-15-7
+| libqt5sql5 #MINVER#, qtbase-abi-5-15-8
 * Build-Depends-Package: qtbase5-dev
  Qt_5.0@Qt_5.0 5.6.0~beta
  Qt_5.10@Qt_5.10 5.10.0

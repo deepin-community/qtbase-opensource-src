@@ -2,14 +2,13 @@ Author: Zhang Hao <zhanghao@uniontech.com>
 Date:   Tue Dec 14 13:34:21 2021 +0800
 Subject: Fix item view auto-scrolling during drag'n'drop
 Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/385042
-
 ---
 
 Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
 ===================================================================
 --- qtbase-opensource-src.orig/src/widgets/itemviews/qabstractitemview.cpp
 +++ qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
-@@ -3961,14 +3961,14 @@ void QAbstractItemView::doAutoScroll()
+@@ -3962,14 +3962,14 @@ void QAbstractItemView::doAutoScroll()
          }
      }
  
@@ -29,7 +28,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
  
      const QPoint pos = d->draggedPosition - d->offset();
      const QRect area = QWidgetPrivate::get(d->viewport)->clipRect();
-@@ -3983,8 +3983,8 @@ void QAbstractItemView::doAutoScroll()
+@@ -3984,8 +3984,8 @@ void QAbstractItemView::doAutoScroll()
      else if (area.right() - pos.x() < margin)
          horizontalScroll->setValue(horizontalValue + d->autoScrollCount);
      // if nothing changed, stop scrolling
@@ -40,7 +39,7 @@ Index: qtbase-opensource-src/src/widgets/itemviews/qabstractitemview.cpp
      if (verticalUnchanged && horizontalUnchanged) {
          stopAutoScroll();
      } else {
-@@ -3992,13 +3992,29 @@ void QAbstractItemView::doAutoScroll()
+@@ -3993,13 +3993,29 @@ void QAbstractItemView::doAutoScroll()
          d->dropIndicatorRect = QRect();
          d->dropIndicatorPosition = QAbstractItemView::OnViewport;
  #endif
