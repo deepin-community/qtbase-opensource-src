@@ -1,6 +1,11 @@
-qtbase-opensource-src (5.15.8-1+dde) UNRELEASED; urgency=medium
+qtbase-opensource-src (5.15.8-1+deepin1) UNRELEASED; urgency=medium
 
+  [ Lu YaNing ]
   * New upstream release (5.15.8).
+
+  [ Zhang TingAn ]
+  * Add some error handling for the inotify file system watcher
+    -- Add-some-error-handling-for-the-inotify-file-system-watcher.patch
 
  -- Lu YaNing <luyaning@uniontech.com>  Sat, 28 Jan 2023 16:18:43 +0800
 
