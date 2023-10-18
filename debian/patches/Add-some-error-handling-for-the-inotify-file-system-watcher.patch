@@ -1,0 +1,21 @@
+Author: Zhang TingAn <zhangtingan@uniontech.com>
+Date:   Wed Oct 18 13:50:13 2023 +0800
+Subject: Add some error handling for the inotify file system watcher
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/329850
+https://codereview.qt-project.org/c/qt/qtbase/+/339537
+
+Index: qtbase-opensource-src/src/corelib/io/qfilesystemwatcher_inotify.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/corelib/io/qfilesystemwatcher_inotify.cpp
++++ qtbase-opensource-src/src/corelib/io/qfilesystemwatcher_inotify.cpp
+@@ -366,7 +366,9 @@ void QInotifyFileSystemWatcherEngine::re
+     // qDebug("QInotifyFileSystemWatcherEngine::readFromInotify");
+ 
+     int buffSize = 0;
+-    ioctl(inotifyFd, FIONREAD, (char *) &buffSize);
++    if(ioctl(inotifyFd, FIONREAD, (char *) &buffSize) == -1 || buffSize == 0)
++        return;
++
+     QVarLengthArray<char, 4096> buffer(buffSize);
+     buffSize = read(inotifyFd, buffer.data(), buffSize);
+     char *at = buffer.data();
