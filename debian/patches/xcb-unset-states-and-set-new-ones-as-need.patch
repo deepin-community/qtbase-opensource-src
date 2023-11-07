@@ -1,0 +1,50 @@
+Author: Zhang TingAn <zhangtingan@uniontech.com>
+Date:   Tue Nov 07 15:09:13 2023 +0800
+Subject: xcb: unset states and set new ones as need
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/504136
+
+Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/plugins/platforms/xcb/qxcbwindow.cpp
++++ qtbase-opensource-src/src/plugins/platforms/xcb/qxcbwindow.cpp
+@@ -1125,18 +1125,21 @@ void QXcbWindow::setWindowState(Qt::Wind
+     if (state == m_windowState)
+         return;
+ 
++    Qt::WindowStates unsetState = m_windowState & ~state;
++    Qt::WindowStates newState =  state & ~m_windowState;
++
+     // unset old state
+-    if (m_windowState & Qt::WindowMinimized)
++    if (unsetState & Qt::WindowMinimized)
+         xcb_map_window(xcb_connection(), m_window);
+-    if (m_windowState & Qt::WindowMaximized)
++    if (unsetState & Qt::WindowMaximized)
+         setNetWmState(false,
+                       atom(QXcbAtom::_NET_WM_STATE_MAXIMIZED_HORZ),
+                       atom(QXcbAtom::_NET_WM_STATE_MAXIMIZED_VERT));
+-    if (m_windowState & Qt::WindowFullScreen)
++    if (unsetState & Qt::WindowFullScreen)
+         setNetWmState(false, atom(QXcbAtom::_NET_WM_STATE_FULLSCREEN));
+ 
+     // set new state
+-    if (state & Qt::WindowMinimized) {
++    if (newState & Qt::WindowMinimized) {
+         {
+             xcb_client_message_event_t event;
+ 
+@@ -1157,13 +1160,8 @@ void QXcbWindow::setWindowState(Qt::Wind
+         }
+         m_minimized = true;
+     }
+-    if (state & Qt::WindowMaximized)
+-        setNetWmState(true,
+-                      atom(QXcbAtom::_NET_WM_STATE_MAXIMIZED_HORZ),
+-                      atom(QXcbAtom::_NET_WM_STATE_MAXIMIZED_VERT));
+-    if (state & Qt::WindowFullScreen)
+-        setNetWmState(true, atom(QXcbAtom::_NET_WM_STATE_FULLSCREEN));
+ 
++    // set Maximized && FullScreen state if need
+     setNetWmState(state);
+ 
+     xcb_get_property_cookie_t cookie = xcb_icccm_get_wm_hints_unchecked(xcb_connection(), m_window);
