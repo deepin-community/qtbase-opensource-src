@@ -64,3 +64,4 @@ QTBUG-108092-add-filter-hook.patch
 QTBUG-101347-revert-xcb-implement-missing-bits-form-icccm414-WM_STATE-handling.patch
 Add-some-error-handling-for-the-inotify-file-system-watcher.patch
 xcb-unset-states-and-set-new-ones-as-need.patch
+QTBUG-117950-Fix-XKB_KEY_dead_lowlin

@@ -1,3 +1,10 @@
+qtbase-opensource-src (5.15.8-1+deepin3) unstable; urgency=medium
+  
+  [ LiChengGang ]
+  * Add QTBUG-117950-Fix-XKB_KEY_dead_lowlin, solve build error.
+
+ -- LiChengGang <lichenggang@uniontech.com>  Mon, 11 Dec 2023 11:01:53 +0800
+
 qtbase-opensource-src (5.15.8-1+deepin2) UNRELEASED; urgency=medium
 
   [ Lu YaNing ]
