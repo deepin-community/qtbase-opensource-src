@@ -1,0 +1,41 @@
+Description: add support for LoongArch
+Origin: upstream, commits
+ https://code.qt.io/cgit/qt/qtbase.git/commit/?id=bdc16f086f1664b5
+ https://code.qt.io/cgit/qt/qtbase.git/commit/?id=0ab51dcc3c0cca0d
+Last-Update: 2024-01-30
+
+--- qtbase-opensource-src-5.15.8.orig/src/corelib/global/archdetect.cpp
++++ qtbase-opensource-src-5.15.8/src/corelib/global/archdetect.cpp
+@@ -59,6 +59,10 @@
+ #  define ARCH_PROCESSOR "x86_64"
+ #elif defined(Q_PROCESSOR_IA64)
+ #  define ARCH_PROCESSOR "ia64"
++#elif defined(Q_PROCESSOR_LOONGARCH_32)
++#  define ARCH_PROCESSOR "loongarch32"
++#elif defined(Q_PROCESSOR_LOONGARCH_64)
++#  define ARCH_PROCESSOR "loongarch64"
+ #elif defined(Q_PROCESSOR_MIPS_64)
+ #  define ARCH_PROCESSOR "mips64"
+ #elif defined(Q_PROCESSOR_MIPS)
+--- qtbase-opensource-src-5.15.8.orig/src/corelib/global/qprocessordetection.h
++++ qtbase-opensource-src-5.15.8/src/corelib/global/qprocessordetection.h
+@@ -227,6 +227,19 @@
+ #  define Q_PROCESSOR_IA64
+ #  define Q_PROCESSOR_WORDSIZE   8
+ // Q_BYTE_ORDER not defined, use endianness auto-detection
++ /*
+++    LoongArch family, known variants: 32- and 64-bit
+++
+++    LoongArch is little-endian.
+++*/
++#elif defined(__loongarch__)
++#  define Q_PROCESSOR_LOONGARCH
++#  if __loongarch_grlen == 64
++#    define Q_PROCESSOR_LOONGARCH_64
++#  else
++#    define Q_PROCESSOR_LOONGARCH_32
++#  endif
++#  define Q_BYTE_ORDER Q_LITTLE_ENDIAN
+ 
+ /*
+     MIPS family, known revisions: I, II, III, IV, 32, 64
