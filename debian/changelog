@@ -1,3 +1,9 @@
+qtbase-opensource-src (5.15.8-1+deepin4) unstable; urgency=medium
+
+  * Fix loongarch64 Architecture Avoid doing kill(-1) in QProcess destructor
+
+ -- LiChengGang <lichenggang@uniontech.com>  Tue, 30 Jan 2024 09:48:54 +0800
+
 qtbase-opensource-src (5.15.8-1+deepin3) unstable; urgency=medium
   
   [ LiChengGang ]

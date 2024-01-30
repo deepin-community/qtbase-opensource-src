@@ -65,3 +65,5 @@ QTBUG-101347-revert-xcb-implement-missing-bits-form-icccm414-WM_STATE-handling.p
 Add-some-error-handling-for-the-inotify-file-system-watcher.patch
 xcb-unset-states-and-set-new-ones-as-need.patch
 QTBUG-117950-Fix-XKB_KEY_dead_lowlin
+QTBUG-86285-Fix-kills-all-user-processes
+loongarch.diff

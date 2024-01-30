@@ -1,0 +1,41 @@
+Description: <Avoid doing kill(-1) in QProcess destructor>
+ qtbase-opensource-src (5.15.8-1+deepin4) unstable; urgency=medium
+ .
+   [ LiChengGang ]
+   * Fix loongarch64 Architecture Avoid doing kill(-1) in QProcess destructor
+Author: LiChengGang <lichenggang@uniontech.com>
+
+---
+https://bugreports.qt.io/browse/QTBUG-86285
+https://codereview.qt-project.org/c/qt/qtbase/+/319522
+Last-Update: 2024-01-30
+
+--- qtbase-opensource-src-5.15.8.orig/src/corelib/io/qprocess_unix.cpp
++++ qtbase-opensource-src-5.15.8/src/corelib/io/qprocess_unix.cpp
+@@ -506,7 +506,7 @@ void QProcessPrivate::startProcess()
+     }
+ 
+     pid = Q_PID(childPid);
+-
++    Q_ASSERT(pid > 0);
+     // parent
+     // close the ends we don't use and make all pipes non-blocking
+     qt_safe_close(childStartedPipe[1]);
+@@ -696,7 +696,7 @@ void QProcessPrivate::terminateProcess()
+ #if defined (QPROCESS_DEBUG)
+     qDebug("QProcessPrivate::terminateProcess()");
+ #endif
+-    if (pid)
++    if (pid > 0) 
+         ::kill(pid_t(pid), SIGTERM);
+ }
+ 
+@@ -705,7 +705,7 @@ void QProcessPrivate::killProcess()
+ #if defined (QPROCESS_DEBUG)
+     qDebug("QProcessPrivate::killProcess()");
+ #endif
+-    if (pid)
++    if (pid > 0)
+         ::kill(pid_t(pid), SIGKILL);
+ }
+ 
