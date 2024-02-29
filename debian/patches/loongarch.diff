@@ -39,3 +39,15 @@ Last-Update: 2024-01-30
  
  /*
      MIPS family, known revisions: I, II, III, IV, 32, 64
+--- qtbase-opensource-src-5.15.8.orig/src/3rdparty/forkfd/forkfd_linux.c
++++ qtbase-opensource-src-5.15.8/src/3rdparty/forkfd/forkfd_linux.c
+@@ -83,7 +83,7 @@ static int sys_clone(unsigned long clone
+ #elif defined(__arc__) || defined(__arm__) || defined(__aarch64__) || defined(__mips__) || \
+     defined(__nds32__) || defined(__hppa__) || defined(__powerpc__) || defined(__i386__) || \
+     defined(__x86_64__) || defined(__xtensa__) || defined(__alpha__) || defined(__riscv) || \
+-    defined(__sw_64__)
++    defined(__sw_64__) || defined(__loongarch__)
+     /* ctid and newtls are inverted on CONFIG_CLONE_BACKWARDS architectures,
+      * but since both values are 0, there's no harm. */
+     return syscall(__NR_clone, cloneflags, child_stack, ptid, ctid, newtls);
+
