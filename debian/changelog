@@ -1,3 +1,9 @@
+qtbase-opensource-src (5.15.8-1+deepin5) unstable; urgency=medium
+
+  * add forkfd/linux: add support for LoongArch.
+
+ -- LiChengGang <lichenggang@uniontech.com>  Thu, 29 Feb 2024 15:18:32 +0800
+
 qtbase-opensource-src (5.15.8-1+deepin4) unstable; urgency=medium
 
   * Fix loongarch64 Architecture Avoid doing kill(-1) in QProcess destructor
