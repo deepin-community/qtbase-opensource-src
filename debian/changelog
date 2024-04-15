@@ -1,3 +1,10 @@
+qtbase-opensource-src (5.15.8-1+deepin6) unstable; urgency=medium
+
+  * xcb: update xkb_state mask as much as possible
+    -- Update-xkb-state-mask-as-much-as-possible.patch
+
+ -- Lu YaNing <luyaning@uniontech.com>  Fri, 12 Apr 2024 22:35:30 +0800
+
 qtbase-opensource-src (5.15.8-1+deepin5) unstable; urgency=medium
 
   * add forkfd/linux: add support for LoongArch.

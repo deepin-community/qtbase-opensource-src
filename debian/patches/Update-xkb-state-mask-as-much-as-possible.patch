@@ -1,0 +1,35 @@
+Author: Lu YaNing <luyaning@uniontech.com>
+Date:   Fri, 12 Apr 2024 23:00:30 +0800
+Subject:  xcb: update xkb_state mask as much as possible
+
+Though we can get xcb_xkb_state_notify_event_t for the change, but
+it looks like not enough, especially when a new usb barcode
+scanner was used, it should be a slave keyboard, and Qt only uses
+core_device_id for now. It should be enough to update xkb_state
+mask when we get key event.
+
+
+Upsteam: https://codereview.qt-project.org/c/qt/qtbase/+/409392
+
+Index: qtbase-opensource-src/src/plugins/platforms/xcb/qxcbkeyboard.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/plugins/platforms/xcb/qxcbkeyboard.cpp
++++ qtbase-opensource-src/src/plugins/platforms/xcb/qxcbkeyboard.cpp
+@@ -457,7 +457,7 @@ static xkb_layout_index_t lockedGroup(qu
+ 
+ void QXcbKeyboard::updateXKBStateFromCore(quint16 state)
+ {
+-    if (m_config && !connection()->hasXKB()) {
++    if (m_config) {
+         struct xkb_state *xkbState = m_xkbState.get();
+         xkb_mod_mask_t modsDepressed = xkb_state_serialize_mods(xkbState, XKB_STATE_MODS_DEPRESSED);
+         xkb_mod_mask_t modsLatched = xkb_state_serialize_mods(xkbState, XKB_STATE_MODS_LATCHED);
+@@ -479,7 +479,7 @@ void QXcbKeyboard::updateXKBStateFromCor
+ 
+ void QXcbKeyboard::updateXKBStateFromXI(void *modInfo, void *groupInfo)
+ {
+-    if (m_config && !connection()->hasXKB()) {
++    if (m_config) {
+         auto *mods = static_cast<xcb_input_modifier_info_t *>(modInfo);
+         auto *group = static_cast<xcb_input_group_info_t *>(groupInfo);
+         const xkb_state_component changedComponents
