@@ -1,7 +1,12 @@
 qtbase-opensource-src (5.15.8-1+deepin6) unstable; urgency=medium
 
+  [ Lu YaNing ]
   * xcb: update xkb_state mask as much as possible
     -- Update-xkb-state-mask-as-much-as-possible.patch
+
+  [ Tian ShiLin ]
+  * Fix Clear WA_UnderMouse attribute when widget gets hidden
+    -- QTBUG-104805-QColorDialog-Buttons-are-highlighted-incorrectly.patch 
 
  -- Lu YaNing <luyaning@uniontech.com>  Fri, 12 Apr 2024 22:35:30 +0800
 

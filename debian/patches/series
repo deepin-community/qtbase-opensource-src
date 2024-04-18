@@ -68,3 +68,4 @@ QTBUG-117950-Fix-XKB_KEY_dead_lowlin
 QTBUG-86285-Fix-kills-all-user-processes
 loongarch.diff
 Update-xkb-state-mask-as-much-as-possible.patch
+QTBUG-104805-QColorDialog-Buttons-are-highlighted-incorrectly.patch
