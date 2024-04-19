@@ -1,0 +1,23 @@
+Author: Tian Shilin<tianshilin@uniontech.com>
+Date:   Fri Apr 19 10:20:24 2024
+Subject: Fix the tips still show when cursor move to another action
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/325086
+
+In this case, the previous action's tip is still displayed
+when the cursor moves from one action with tip to another action
+without tip.
+
+
+Index: qtbase-opensource-src/src/widgets/widgets/qmenu.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/widgets/qmenu.cpp
++++ qtbase-opensource-src/src/widgets/widgets/qmenu.cpp
+@@ -3069,6 +3069,8 @@ QMenu::event(QEvent *e)
+                 const QString toolTip = action->d_func()->tooltip;
+                 if (!toolTip.isEmpty())
+                     QToolTip::showText(ev->globalPos(), toolTip, this);
++                else
++                    QToolTip::hideText();
+                 return true;
+             }
+         }

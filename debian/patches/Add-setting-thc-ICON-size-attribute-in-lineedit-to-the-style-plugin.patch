@@ -1,0 +1,96 @@
+Author: Tian Shilin<tianshilin@uniontech.com>
+Date:   Thu May 16 11:05:24 2024
+Subject:Add setting the ICON size and margin attribute in lineedit
+upstream: https://codereview.qt-project.org/c/qt/qtbase/+/337970
+https://codereview.qt-project.org/c/qt/qtbase/+/363114
+
+Remove _d_dtk_lineeditActionMargin、_d_dtk_lineeditActionWidth、
+_d_dtk_lineeditActionHeight.
+
+When the font is large enough, using PM_SmallIconSize will get a large
+lineedit,but the icon is very small. This is very unsightly, and the
+style plug-in hopes to be able to define the size of the icon by itself.
+
+The styles can't control the margin of the icon container, and its value
+is hardcoded to a quarter of the iconSize, which is very unfriendly.
+Add a PixelMetric enum value to allow styles to control the margin.
+
+
+Index: qtbase-opensource-src/src/widgets/styles/qcommonstyle.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/styles/qcommonstyle.cpp
++++ qtbase-opensource-src/src/widgets/styles/qcommonstyle.cpp
+@@ -4847,7 +4847,12 @@ QT_WARNING_POP
+     case PM_IconViewIconSize:
+         ret = proxy()->pixelMetric(PM_LargeIconSize, opt, widget);
+         break;
+-
++    case PM_LineEditIconSize:
++        ret = proxy()->pixelMetric(PM_SmallIconSize, opt, widget);
++        break;
++    case PM_LineEditIconMargin:
++        ret = proxy()->pixelMetric(PM_LineEditIconSize, opt, widget) / 4;
++        break;
+     case PM_LargeIconSize:
+         ret = int(QStyleHelper::dpiScaled(32, opt));
+         break;
+Index: qtbase-opensource-src/src/widgets/styles/qfusionstyle.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/styles/qfusionstyle.cpp
++++ qtbase-opensource-src/src/widgets/styles/qfusionstyle.cpp
+@@ -3045,6 +3045,9 @@ int QFusionStyle::pixelMetric(PixelMetri
+     case PM_ListViewIconSize:
+         val = 24;
+         break;
++    case PM_LineEditIconSize:
++        val = 24;
++        break;
+     case PM_DialogButtonsSeparator:
+     case PM_ScrollBarSliderMin:
+         val = 26;
+Index: qtbase-opensource-src/src/widgets/styles/qstyle.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/styles/qstyle.cpp
++++ qtbase-opensource-src/src/widgets/styles/qstyle.cpp
+@@ -1501,6 +1501,12 @@ void QStyle::drawItemPixmap(QPainter *pa
+     \value PM_TitleBarButtonSize The size of buttons on a title bar.
+            This enum value has been introduced in Qt 5.8.
+ 
++    \value PM_LineEditIconSize The default size for icons in a line edit.
++          This enum value has been introduced in Qt 6.2.
++
++    \value PM_LineEditIconMargin The margin around icons in a line edit.
++           This enum value has been introduced in Qt 6.3.
++
+     \value PM_CustomBase Base value for custom pixel metrics.  Custom
+     values must be greater than this value.
+ 
+Index: qtbase-opensource-src/src/widgets/styles/qstyle.h
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/styles/qstyle.h
++++ qtbase-opensource-src/src/widgets/styles/qstyle.h
+@@ -587,6 +587,9 @@ public:
+         PM_TitleBarButtonIconSize,
+         PM_TitleBarButtonSize,
+ 
++        PM_LineEditIconSize,
++        PM_LineEditIconMargin,
++
+         // do not add any values below/greater than this
+         PM_CustomBase = 0xf0000000
+     };
+Index: qtbase-opensource-src/src/widgets/widgets/qlineedit_p.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/widgets/qlineedit_p.cpp
++++ qtbase-opensource-src/src/widgets/widgets/qlineedit_p.cpp
+@@ -496,8 +496,8 @@ QLineEditPrivate::SideWidgetParameters Q
+ {
+     Q_Q(const QLineEdit);
+     SideWidgetParameters result;
+-    result.iconSize = q->style()->pixelMetric(QStyle::PM_SmallIconSize, nullptr, q);
+-    result.margin = result.iconSize / 4;
++    result.iconSize = q->style()->pixelMetric(QStyle::PM_LineEditIconSize, nullptr, q);
++    result.margin = q->style()->pixelMetric(QStyle::PM_LineEditIconMargin, nullptr, q);
+     result.widgetWidth = result.iconSize + 6;
+     result.widgetHeight = result.iconSize + 2;
+     return result;

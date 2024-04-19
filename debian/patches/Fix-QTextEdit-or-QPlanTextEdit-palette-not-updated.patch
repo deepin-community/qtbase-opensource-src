@@ -1,0 +1,60 @@
+Author: Tian Shilin<tianshilin@uniontech.com>
+Date:   Fri Apr 19 10:20:24 2024
+Subject:Fix QTextEdit/QPlanTextEdit palette not updated
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/542094
+
+QPlainTextEdit/QTextEdit, etc. never received ActivationChange
+when used as child widget. Set palette to control on
+WindowActivate/WindowDeactivate
+
+
+Index: qtbase-opensource-src/src/widgets/widgets/qplaintextedit.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/widgets/qplaintextedit.cpp
++++ qtbase-opensource-src/src/widgets/widgets/qplaintextedit.cpp
+@@ -1601,6 +1601,8 @@ bool QPlainTextEdit::event(QEvent *e)
+         return true;
+     }
+ #endif // QT_NO_GESTURES
++    else if (e->type() == QEvent::WindowActivate || e->type() == QEvent::WindowDeactivate)
++        d->control->setPalette(palette());
+     return QAbstractScrollArea::event(e);
+ }
+ 
+Index: qtbase-opensource-src/src/widgets/widgets/qtextedit.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/widgets/qtextedit.cpp
++++ qtbase-opensource-src/src/widgets/widgets/qtextedit.cpp
+@@ -1098,7 +1098,6 @@ bool QTextEdit::event(QEvent *e)
+ #ifndef QT_NO_CONTEXTMENU
+     if (e->type() == QEvent::ContextMenu
+         && static_cast<QContextMenuEvent *>(e)->reason() == QContextMenuEvent::Keyboard) {
+-        Q_D(QTextEdit);
+         ensureCursorVisible();
+         const QPoint cursorPos = cursorRect().center();
+         QContextMenuEvent ce(QContextMenuEvent::Keyboard, cursorPos, d->viewport->mapToGlobal(cursorPos));
+@@ -1106,19 +1105,18 @@ bool QTextEdit::event(QEvent *e)
+         const bool result = QAbstractScrollArea::event(&ce);
+         e->setAccepted(ce.isAccepted());
+         return result;
+-    } else if (e->type() == QEvent::ShortcutOverride
+-               || e->type() == QEvent::ToolTip) {
++    } else if (e->type() == QEvent::ShortcutOverride || e->type() == QEvent::ToolTip) {
+         d->sendControlEvent(e);
+-    }
+-#else
+-    Q_UNUSED(d)
++    } else
+ #endif // QT_NO_CONTEXTMENU
+ #ifdef QT_KEYPAD_NAVIGATION
+     if (e->type() == QEvent::EnterEditFocus || e->type() == QEvent::LeaveEditFocus) {
+         if (QApplicationPrivate::keypadNavigationEnabled())
+             d->sendControlEvent(e);
+-    }
++    } else
+ #endif
++    if (e->type() == QEvent::WindowActivate || e->type() == QEvent::WindowDeactivate)
++        d->control->setPalette(palette());
+     return QAbstractScrollArea::event(e);
+ }
+ 
