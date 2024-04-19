@@ -1,3 +1,18 @@
+qtbase-opensource-src (5.15.8-1+deepin7) UNRELEASED; urgency=medium
+
+  * Fix Clear WA_UnderMouse attribute when widget gets hidden
+    -- QTBUG-104805-QColorDialog-Buttons-are-highlighted-incorrectly.patch
+  * Fix the tips still show when cursor move to another action
+    -- QTBUG-89082-The-previous-tips-is-still-displayed-when-mouse-move-to-another-Action-without-tips.patch
+  * QMenu: toggle action submenu disappears immediately
+    -- QMenu-toggle-action-submenu-disappears-immediately.patch
+  * Fix QTextEdit or QPlanTextEdit palette not updated
+    -- Fix-QTextEdit-or-QPlanTextEdit-palette-not-updated.patch
+  * remove fix_action_distance_lineedit.patch, and allow styles to
+    control the margin around icons in QLineEdit.
+
+ -- Tian ShiLin <tiansi@uniontech.com>  Fri, 19 Apr 2024 10:28:01 +0800
+
 qtbase-opensource-src (5.15.8-1+deepin6) unstable; urgency=medium
 
   * xcb: update xkb_state mask as much as possible

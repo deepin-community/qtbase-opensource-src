@@ -27,7 +27,7 @@ revert_startBlocking_removal.diff
 0009-fix_qss_border_cap_style.patch
 fix_qrasterpaintengine_rect_for_hidpi.patch
 dnot_add_application_path_to_library_path_for_default.patch
-fix_action_distance_lineedit.patch
+#fix_action_distance_lineedit.patch
 add-sunway-support.patch
 QTBUG-85978-85985-QLineEdit-Fix-the-problem-under-the-touch-screen.patch
 QTBUG-85088-QGraphicsView-show-error-after-lose-focus.patch
@@ -36,7 +36,7 @@ remove-the-X11-True-and-False.patch
 feat-touch-screen-QListView-sliding-acceleration.patch
 fix-QDoubleSpinbox-and-QSpinbox-not-change-value-when-mouse-scroll.patch
 fix-_NET_SUPPORTED-attribute-cannot-be-updated.patch
-add-setting-thc-ICON-size-attribute-in-lineedit-to-the-style-plugin.patch
+Add-setting-thc-ICON-size-attribute-in-lineedit-to-the-style-plugin.patch
 QTBUG-92468-fix-qtextedit-cursor-drawn-incorrectly.patch
 QTBUG-92460-don-use-large-icons-in-qlineedit.patch
 QTBUG-92366-Check-scrollbar-visibility-when-computing-QListView-Margins.patch
@@ -68,3 +68,7 @@ QTBUG-117950-Fix-XKB_KEY_dead_lowlin
 QTBUG-86285-Fix-kills-all-user-processes
 loongarch.diff
 Update-xkb-state-mask-as-much-as-possible.patch
+QTBUG-104805-QColorDialog-Buttons-are-highlighted-incorrectly.patch
+QTBUG-89082-The-previous-tips-is-still-displayed-when-mouse-move-to-another-Action-without-tips.patch
+QMenu-toggle-action-submenu-disappears-immediately.patch
+Fix-QTextEdit-or-QPlanTextEdit-palette-not-updated.patch

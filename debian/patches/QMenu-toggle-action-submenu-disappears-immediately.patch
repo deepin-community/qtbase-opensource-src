@@ -1,0 +1,47 @@
+Author: Tian Shilin<tianshilin@uniontech.com>
+Date:   Fri Apr 19 10:20:24 2024
+Subject: QMenu: toggle action submenu disappears immediately
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/466589
+
+When the submenu is popped up, the submenu should be collapsed
+immediately when the action is switched.
+
+
+Index: qtbase-opensource-src/src/widgets/widgets/qmenu.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/widgets/qmenu.cpp
++++ qtbase-opensource-src/src/widgets/widgets/qmenu.cpp
+@@ -633,8 +633,12 @@ void QMenuPrivate::popupAction(QAction *
+                 q->internalDelayedPopup();
+             else if (action->menu() && !action->menu()->isVisible())
+                 delayState.start(delay, action);
+-            else if (!action->menu())
++            else if (!action->menu()) {
+                 delayState.stop();
++                if (activeMenu)
++                    hideMenu(activeMenu);
++            }
++
+             if (activateFirst && action->menu())
+                 action->menu()->d_func()->setFirstActionActive();
+         }
+Index: qtbase-opensource-src/tests/auto/widgets/widgets/qmenu/tst_qmenu.cpp
+===================================================================
+--- qtbase-opensource-src.orig/tests/auto/widgets/widgets/qmenu/tst_qmenu.cpp
++++ qtbase-opensource-src/tests/auto/widgets/widgets/qmenu/tst_qmenu.cpp
+@@ -1207,7 +1207,6 @@ void tst_QMenu::click_while_dismissing_s
+     menu.show();
+     QSignalSpy spy(action, &QAction::triggered);
+     QSignalSpy menuShownSpy(&sub, &QMenu::aboutToShow);
+-    QSignalSpy menuHiddenSpy(&sub, &QMenu::aboutToHide);
+     QVERIFY(QTest::qWaitForWindowExposed(&menu));
+     QWindow *menuWindow = menu.windowHandle();
+     QVERIFY(menuWindow);
+@@ -1218,7 +1217,6 @@ void tst_QMenu::click_while_dismissing_s
+ #ifdef Q_OS_WINRT
+     QEXPECT_FAIL("", "WinRT does not support QTest::mouseMove", Abort);
+ #endif
+-    QVERIFY(menuShownSpy.wait());
+     QVERIFY(sub.isVisible());
+     QVERIFY(QTest::qWaitForWindowExposed(&sub));
+     //press over the submenu entry

@@ -1,0 +1,38 @@
+Author: Tian Shilin<tianshilin@uniontech.com>
+Date:   Fri Apr 19 10:20:24 2024
+Subject: QDialog buttons are highlighted incorrectly
+Upstream: https://codereview.qt-project.org/c/qt/qtbase/+/431809
+
+This patch clears WA_UnderMouse attribute in widget hideChildren() and
+subsequently, widgets that are hidden will not inherit this attribute
+on the next show operation. To test flag Qt::X11BypassWindowManagerHint
+is needed when is_closing=0(e.g. Closing DDialog by Cancel or Ok Bt).
+
+
+Index: qtbase-opensource-src/src/widgets/kernel/qwidget.cpp
+===================================================================
+--- qtbase-opensource-src.orig/src/widgets/kernel/qwidget.cpp
++++ qtbase-opensource-src/src/widgets/kernel/qwidget.cpp
+@@ -8212,6 +8212,7 @@ void QWidgetPrivate::showChildren(bool s
+ 
+ void QWidgetPrivate::hideChildren(bool spontaneous)
+ {
++    Q_Q(QWidget);
+     QList<QObject*> childList = children;
+     for (int i = 0; i < childList.size(); ++i) {
+         QWidget *widget = qobject_cast<QWidget*>(childList.at(i));
+@@ -8243,6 +8244,14 @@ void QWidgetPrivate::hideChildren(bool s
+         }
+ #endif
+     }
++
++    // If the window of this widget is not closed, then the leave event
++    // will eventually handle the widget under mouse use case.
++    // Otherwise, we need to explicitly handle it here.
++    if (QWidget* widgetWindow = q->window();
++        widgetWindow && widgetWindow->data->is_closing) {
++        q->setAttribute(Qt::WA_UnderMouse, false);
++    }
+ }
+ 
+ bool QWidgetPrivate::close_helper(CloseMode mode)
