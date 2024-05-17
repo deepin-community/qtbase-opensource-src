@@ -1,4 +1,4 @@
-qtbase-opensource-src (5.15.8-1+deepin7) UNRELEASED; urgency=medium
+qtbase-opensource-src (5.15.8-1+deepin8) unstable; urgency=medium
 
   * Fix Clear WA_UnderMouse attribute when widget gets hidden
     -- QTBUG-104805-QColorDialog-Buttons-are-highlighted-incorrectly.patch
@@ -10,8 +10,10 @@ qtbase-opensource-src (5.15.8-1+deepin7) UNRELEASED; urgency=medium
     -- Fix-QTextEdit-or-QPlanTextEdit-palette-not-updated.patch
   * remove fix_action_distance_lineedit.patch, and allow styles to
     control the margin around icons in QLineEdit.
+  * xcb: Delete touch points without target windows
+    -- Xcb-Delete-touch-points-without-target-windows.patch
 
- -- Tian ShiLin <tiansi@uniontech.com>  Fri, 19 Apr 2024 10:28:01 +0800
+ -- Tian ShiLin <tiansi@uniontech.com>  Fri, 17 May 2024 17:00:44 +0800
 
 qtbase-opensource-src (5.15.8-1+deepin6) unstable; urgency=medium
 

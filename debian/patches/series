@@ -72,3 +72,4 @@ QTBUG-104805-QColorDialog-Buttons-are-highlighted-incorrectly.patch
 QTBUG-89082-The-previous-tips-is-still-displayed-when-mouse-move-to-another-Action-without-tips.patch
 QMenu-toggle-action-submenu-disappears-immediately.patch
 Fix-QTextEdit-or-QPlanTextEdit-palette-not-updated.patch
+Xcb-Delete-touch-points-without-target-windows.patch
