@@ -1,3 +1,10 @@
+qtbase-opensource-src (5.15.8-1+deepin9) unstable; urgency=medium
+
+  * Fix OpenGL ES auto selection patch,The patch was applied successfully and compiled successfully.
+    -- 0013-Deepin-auto-select-opengl-or-opengles.patch
+    
+ -- ZhuYuJie <libriunk@gmail.com>  Thu, 30 May 2024 00:30:21 +0800
+
 qtbase-opensource-src (5.15.8-1+deepin8) unstable; urgency=medium
 
   * Fix Clear WA_UnderMouse attribute when widget gets hidden
