@@ -1,3 +1,9 @@
+qtbase-opensource-src (5.15.8-1+deepin9) unstable; urgency=medium
+
+  * fix auto selection for gles
+
+ -- Chang Yang <yangchang@deepin.org>  Fri, 31 May 2024 09:59:30 +0800
+
 qtbase-opensource-src (5.15.8-1+deepin8) unstable; urgency=medium
 
   * Fix Clear WA_UnderMouse attribute when widget gets hidden

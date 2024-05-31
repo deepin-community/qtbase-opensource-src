@@ -1,8 +1,31 @@
-Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.cpp
-===================================================================
---- qtbase-opensource-src.orig/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.cpp
-+++ qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.cpp
-@@ -43,6 +43,207 @@ QT_BEGIN_NAMESPACE
+From 02484a9197c6ffb2ca5fd3c50e10774900aea465 Mon Sep 17 00:00:00 2001
+From: Jiajie Chen <c@jia.je>
+Date: Thu, 25 Apr 2024 05:31:42 -0700
+Subject: [PATCH 13/15] [Deepin] auto select opengl or opengles
+
+Adapt a patch from Linux Deepin to auto select GLES.
+
+The patch is modified to allow it to work on 5.15. Setting
+QT_XCB_GL_INTEGRATION=xcb_egl is necessary for it to work now.
+
+Tested on Lichee Pi 4A with PowerVR closed GLES driver (and llvmpipe as
+GLX driver).
+
+Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+---
+ .../xcb/gl_integrations/qxcbglintegration.cpp | 208 ++++++++++++++++++
+ .../xcb/gl_integrations/qxcbglintegration.h   |  20 ++
+ .../xcb_egl/qxcbeglintegration.cpp            |   5 +
+ .../gl_integrations/xcb_egl/qxcbeglwindow.cpp |   8 +-
+ .../xcb_glx/qglxintegration.cpp               |   4 +
+ .../src/plugins/platforms/xcb/xcb_qpa_lib.pro |   2 +-
+ 6 files changed, 245 insertions(+), 2 deletions(-)
+
+diff --git a/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.cpp b/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.cpp
+index 59401d2ce7..6cfa9a5ac3 100644
+--- a/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.cpp
++++ b/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.cpp
+@@ -43,6 +43,214 @@ QT_BEGIN_NAMESPACE
  
  Q_LOGGING_CATEGORY(lcQpaGl, "qt.qpa.gl")
  
@@ -17,6 +40,7 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglint
 +     EGLDisplay  egl_display;
 +     EGLContext  egl_context;
 +     EGLSurface  egl_surface;
++     EGLenum     current_api;
 +
 +     x_display = XOpenDisplay(nullptr);
 +     if (x_display == nullptr) {
@@ -41,13 +65,18 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglint
 +        XCloseDisplay(x_display);
 +        return 0;
 +     }
++     current_api = eglQueryAPI();
++     eglBindAPI(EGL_OPENGL_ES_API);
++     if (current_api == EGL_NONE) {
++        // do not support OpenGL ES at all
++        return 0;
++     }
 +     EGLint attr[] = {       // some attributes to set up our egl-interface
 +         EGL_BUFFER_SIZE, 16,
 +         EGL_RENDERABLE_TYPE,
 +         EGL_OPENGL_ES_BIT,
 +         EGL_NONE
 +     };
-+     eglBindAPI(EGL_OPENGL_ES_API);
 +     EGLConfig  ecfg;
 +     EGLint     num_config;
 +     if (!eglChooseConfig(egl_display, attr, &ecfg, 1, &num_config)) {
@@ -87,18 +116,19 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglint
 +     eglMakeCurrent(egl_display, egl_surface, egl_surface, egl_context);
 +     const QString strShadinglanguage = reinterpret_cast<const char *>(glGetString(GL_SHADING_LANGUAGE_VERSION));
 +     const QString strVersion = reinterpret_cast<const char *>(glGetString(GL_VERSION));
-+     const QString strRenser = reinterpret_cast<const char *>(glGetString(GL_RENDERER));
++     const QString strRenderer = reinterpret_cast<const char *>(glGetString(GL_RENDERER));
 +     eglMakeCurrent(egl_display, EGL_NO_SURFACE, EGL_NO_SURFACE, EGL_NO_CONTEXT);
 +
 +     eglDestroyContext(egl_display, egl_context);
 +     eglDestroySurface(egl_display, egl_surface);
++     eglBindAPI(current_api);
 +     eglTerminate(egl_display);
 +     XDestroyWindow(x_display, win);
 +     XCloseDisplay(x_display);
 +
-+    if (strVersion.isNull() || strRenser.isEmpty() || strShadinglanguage.isEmpty())
++    if (strVersion.isNull() || strRenderer.isEmpty() || strShadinglanguage.isEmpty())
 +        return 0;
-+    if (strVersion.contains(QStringLiteral("Mesa")) || strRenser.contains(QStringLiteral("llvm")))
++    if (strVersion.contains(QStringLiteral("Mesa")) || strRenderer.contains(QStringLiteral("llvm")))
 +        return 1;
 +    else
 +        return 2;
@@ -155,7 +185,7 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglint
 +    XMapWindow(dpy, win);
 +
 +    glc = glXCreateNewContext(dpy, *fc, GLX_RGBA_TYPE, nullptr, GL_TRUE);
-+    if (glc){
++    if (!glc){
 +        XFree(fc);
 +        XFree(vi);
 +        XDestroyWindow(dpy, win);
@@ -166,7 +196,7 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglint
 +    glXMakeContextCurrent(dpy, win, win, glc);
 +    const QString strShadinglanguage = reinterpret_cast<const char *>(glGetString(GL_SHADING_LANGUAGE_VERSION));
 +    const QString strVersion = reinterpret_cast<const char *>(glGetString(GL_VERSION));
-+    const QString strRenser = reinterpret_cast<const char *>(glGetString(GL_RENDERER));
++    const QString strRenderer = reinterpret_cast<const char *>(glGetString(GL_RENDERER));
 +    glXMakeCurrent(dpy, None, nullptr);
 +
 +    XFree(fc);
@@ -175,9 +205,9 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglint
 +    XDestroyWindow(dpy, win);
 +    XCloseDisplay(dpy);
 +
-+    if (strVersion.isNull() || strRenser.isEmpty() || strShadinglanguage.isEmpty())
++    if (strVersion.isNull() || strRenderer.isEmpty() || strShadinglanguage.isEmpty())
 +        return 0;
-+    if (strVersion.contains(QStringLiteral("Mesa")) || strRenser.contains(QStringLiteral("llvm")))
++    if (strRenderer.contains(QStringLiteral("softpipe")) || strRenderer.contains(QStringLiteral("llvmpipe")))
 +        return 1;
 +    else
 +        return 2;
@@ -210,10 +240,10 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglint
  QXcbGlIntegration::QXcbGlIntegration()
  {
  }
-Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.h
-===================================================================
---- qtbase-opensource-src.orig/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.h
-+++ qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.h
+diff --git a/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.h b/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.h
+index 07e983a499..1af54770ae 100644
+--- a/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.h
++++ b/src/plugins/platforms/xcb/gl_integrations/qxcbglintegration.h
 @@ -52,6 +52,26 @@ class QXcbNativeInterfaceHandler;
  
  Q_XCB_EXPORT Q_DECLARE_LOGGING_CATEGORY(lcQpaGl)
@@ -241,11 +271,11 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/qxcbglint
  class Q_XCB_EXPORT QXcbGlIntegration
  {
  public:
-Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/xcb_egl/qxcbeglintegration.cpp
-===================================================================
---- qtbase-opensource-src.orig/src/plugins/platforms/xcb/gl_integrations/xcb_egl/qxcbeglintegration.cpp
-+++ qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/xcb_egl/qxcbeglintegration.cpp
-@@ -98,6 +98,11 @@ QXcbWindow *QXcbEglIntegration::createWi
+diff --git a/src/plugins/platforms/xcb/gl_integrations/xcb_egl/qxcbeglintegration.cpp b/src/plugins/platforms/xcb/gl_integrations/xcb_egl/qxcbeglintegration.cpp
+index fe18bc24db..b298081c3f 100644
+--- a/src/plugins/platforms/xcb/gl_integrations/xcb_egl/qxcbeglintegration.cpp
++++ b/src/plugins/platforms/xcb/gl_integrations/xcb_egl/qxcbeglintegration.cpp
+@@ -98,6 +98,11 @@ QXcbWindow *QXcbEglIntegration::createWindow(QWindow *window) const
  
  QPlatformOpenGLContext *QXcbEglIntegration::createPlatformOpenGLContext(QOpenGLContext *context) const
  {
@@ -257,11 +287,31 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/xcb_egl/q
      QXcbScreen *screen = static_cast<QXcbScreen *>(context->screen()->handle());
      QXcbEglContext *platformContext = new QXcbEglContext(screen->surfaceFormatFor(context->format()),
                                                           context->shareHandle(),
-Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
-===================================================================
---- qtbase-opensource-src.orig/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
-+++ qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
-@@ -232,6 +232,10 @@ QGLXContext::QGLXContext(QXcbScreen *scr
+diff --git a/src/plugins/platforms/xcb/gl_integrations/xcb_egl/qxcbeglwindow.cpp b/src/plugins/platforms/xcb/gl_integrations/xcb_egl/qxcbeglwindow.cpp
+index 30e3381993..f000fc5a55 100644
+--- a/src/plugins/platforms/xcb/gl_integrations/xcb_egl/qxcbeglwindow.cpp
++++ b/src/plugins/platforms/xcb/gl_integrations/xcb_egl/qxcbeglwindow.cpp
+@@ -59,8 +59,14 @@ QXcbEglWindow::~QXcbEglWindow()
+     eglDestroySurface(m_glIntegration->eglDisplay(), m_surface);
+ }
+ 
+-void QXcbEglWindow::resolveFormat(const QSurfaceFormat &format)
++void QXcbEglWindow::resolveFormat(const QSurfaceFormat &f)
+ {
++    QSurfaceFormat format = f;
++
++    if (format.renderableType() == QSurfaceFormat::DefaultRenderableType) {
++        format.setRenderableType(DetectOpenGLCapability::instance()->getOpenGLType());
++    }
++
+     m_config = q_configFromGLFormat(m_glIntegration->eglDisplay(), format);
+     m_format = q_glFormatFromConfig(m_glIntegration->eglDisplay(), m_config, format);
+ }
+diff --git a/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp b/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
+index 790837463e..3c111ba5b9 100644
+--- a/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
++++ b/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
+@@ -232,6 +232,10 @@ QGLXContext::QGLXContext(QXcbScreen *screen, const QSurfaceFormat &format, QPlat
      , m_getGraphicsResetStatus(nullptr)
      , m_lost(false)
  {
@@ -272,10 +322,10 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/gl_integrations/xcb_glx/q
      if (nativeHandle.isNull())
          init(screen, share);
      else
-Index: qtbase-opensource-src/src/plugins/platforms/xcb/xcb_qpa_lib.pro
-===================================================================
---- qtbase-opensource-src.orig/src/plugins/platforms/xcb/xcb_qpa_lib.pro
-+++ qtbase-opensource-src/src/plugins/platforms/xcb/xcb_qpa_lib.pro
+diff --git a/src/plugins/platforms/xcb/xcb_qpa_lib.pro b/src/plugins/platforms/xcb/xcb_qpa_lib.pro
+index 587bbcef68..c374949a5a 100644
+--- a/src/plugins/platforms/xcb/xcb_qpa_lib.pro
++++ b/src/plugins/platforms/xcb/xcb_qpa_lib.pro
 @@ -1,5 +1,5 @@
  TARGET     = QtXcbQpa
 -CONFIG += no_module_headers internal_module
@@ -283,3 +333,6 @@ Index: qtbase-opensource-src/src/plugins/platforms/xcb/xcb_qpa_lib.pro
  DEFINES += QT_NO_FOREACH
  
  QT += \
+-- 
+2.45.0
+
