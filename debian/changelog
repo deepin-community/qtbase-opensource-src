@@ -1,3 +1,11 @@
+qtbase-opensource-src (5.15.8-1+deepin10) unstable; urgency=medium
+
+  * New upstream release.
+  * fix: Handle missing charset value in qDecodeDataUrl to avoid assertionAdd commentMore actions
+    -- CVE-2025-5455-qtbase-5.15.patch
+
+ -- Tian ShiLin <tianshilin@uniontech.com>  Fri, 14 Jun 2025 10:42:24 +0800
+
 qtbase-opensource-src (5.15.8-1+deepin9) unstable; urgency=medium
 
   * fix auto selection for gles

@@ -73,3 +73,4 @@ QTBUG-89082-The-previous-tips-is-still-displayed-when-mouse-move-to-another-Acti
 QMenu-toggle-action-submenu-disappears-immediately.patch
 Fix-QTextEdit-or-QPlanTextEdit-palette-not-updated.patch
 Xcb-Delete-touch-points-without-target-windows.patch
+CVE-2025-5455-qtbase-5.15.patch
