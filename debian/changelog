@@ -1,3 +1,23 @@
+qtbase-opensource-src (5.15.8-1+deepin11) unstable; urgency=medium
+
+  * fix(build): make the build bit-reproducible (-no-pch, QT_HASH_SEED)
+    - Disable precompiled headers on all architectures (was arm64/i386
+      only): GCC PCH use makes DWARF non-deterministic - duplicate decls
+      loaded from the PCH consume DECL_UIDs and var-tracking hashes on
+      them, shifting .debug_loclists boundaries between builds (GCC PR
+      124811). With pch on, two rebuilds of 5.15.8-1+deepin10 produced
+      libQt5Sql.so, libQt5EglFSDeviceIntegration.so,
+      libqevdevtouchplugin.so and libqlinuxfb.so that were identical
+      after stripping except for the link-time build-id, making
+      libqt5gui5/libqt5sql5 and their -dbgsym packages unreproducible
+    - Export QT_HASH_SEED=0 so qdoc/qhelpgenerator iterate QHash in a
+      fixed order; without it the per-process random hash seed changes
+      the sqlite row order inside the .qch files shipped in qtbase5-doc
+      (verified on Qt 5.15.8: unset seed gives a different order on
+      every run, QT_HASH_SEED=0 gives a stable order)
+
+ -- lichenggang <lichenggang@uniontech.com>  Sat, 24 Oct 2026 00:28:26 +0800
+
 qtbase-opensource-src (5.15.8-1+deepin10) unstable; urgency=medium
 
   * New upstream release.
