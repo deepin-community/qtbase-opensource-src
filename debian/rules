@@ -14,6 +14,11 @@ export CFLAGS := $(shell dpkg-buildflags --get CFLAGS) $(shell dpkg-buildflags -
 export CXXFLAGS := $(shell dpkg-buildflags --get CXXFLAGS) $(shell dpkg-buildflags --get CPPFLAGS) $(shell getconf LFS_CFLAGS)
 export LDFLAGS := $(shell dpkg-buildflags --get LDFLAGS)
 export PKG_CONFIG := /usr/bin/$(DEB_HOST_GNU_TYPE)-pkg-config
+# Deterministic QHash iteration order: without a fixed hash seed qdoc /
+# qhelpgenerator insert rows into the .qch sqlite database in a
+# per-process random order, which makes the qtbase5-doc .qch files differ
+# between builds.
+export QT_HASH_SEED := 0
 sslpkgname := $(shell dpkg-query --show '--showformat=$${Depends}' libssl-dev | cut -d ' ' -f1)
 
 # Upstream changelog
@@ -27,10 +32,17 @@ else
 	extra_configure_opts += -no-sql-ibase
 endif
 
-no_pch_architectures := arm64
-ifeq ($(DEB_HOST_ARCH),$(findstring $(DEB_HOST_ARCH), $(no_pch_architectures)))
-	extra_configure_opts += -no-pch
-endif
+# Do not use precompiled headers on any architecture. GCC's PCH support
+# makes DWARF debug info non-deterministic: duplicate decls loaded from
+# the PCH consume DECL_UIDs, and var-tracking hashes on them, so the
+# boundaries written to .debug_loclists shift between builds
+# (https://gcc.gnu.org/bugzilla/show_bug.cgi?id=124811). With pch
+# enabled, two rebuilds of 5.15.8-1+deepin10 produced libQt5Sql.so /
+# libQt5EglFSDeviceIntegration.so / libqevdevtouchplugin.so /
+# libqlinuxfb.so whose stripped binaries were identical except for the
+# link-time build-id (sha1 computed over the unstripped binary), making
+# libqt5gui5, libqt5sql5 and their -dbgsym packages unreproducible.
+extra_configure_opts += -no-pch
 
 gles2_architectures := armel armhf
 ifeq ($(DEB_HOST_ARCH),$(findstring $(DEB_HOST_ARCH), $(gles2_architectures)))
